@@ -9,7 +9,3 @@ PASOS:
 3. Ejecutar:
    INICIAR_SERVIDOR.bat
 
-ADMIN:
-http://127.0.0.1:8000/system-control-panel-89721/
-
-=========================================
