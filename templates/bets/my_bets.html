@@ -1,0 +1,63 @@
+﻿{% extends 'base.html' %}
+{% block title %}Mis Tickets — StakeFolclor{% endblock %}
+{% block content %}
+<div class="container sec-pad">
+  <div class="mb-4">
+    <h1 class="sec-title">Mis Tickets</h1>
+    <p class="text-dim">Historial completo de tus apuestas virtuales</p>
+  </div>
+
+  <!-- KPIs -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3"><div class="section-kpi text-center"><div class="kpi-lbl">Saldo</div><div class="kpi-val" style="color:var(--accent-lt)">S/{{ wallet.balance|floatformat:2 }}</div></div></div>
+    <div class="col-6 col-md-3"><div class="section-kpi text-center"><div class="kpi-lbl">Ganado</div><div class="kpi-val" style="color:var(--green)">S/{{ wallet.total_won|floatformat:2 }}</div></div></div>
+    <div class="col-6 col-md-3"><div class="section-kpi text-center"><div class="kpi-lbl">Perdido</div><div class="kpi-val" style="color:var(--red)">S/{{ wallet.total_lost|floatformat:2 }}</div></div></div>
+    <div class="col-6 col-md-3"><div class="section-kpi text-center"><div class="kpi-lbl">Total tickets</div><div class="kpi-val">{{ pending|length|add:resolved|length }}</div></div></div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <h3 style="font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:.85rem"><i class="bi bi-clock text-acc me-1"></i>Abiertas ({{ pending|length }})</h3>
+      {% for bet in pending %}
+      <div class="ticket-card t-pending mb-2">
+        <div class="ticket-top">
+          <div class="ticket-icon"><i class="bi bi-clock"></i></div>
+          <div style="flex:1">
+            <div class="ticket-name">{{ bet.option.group_name }}</div>
+            <div class="ticket-meta">{{ bet.option.contest.name }} &bull; {{ bet.option.get_bet_type_display }}{% if bet.option.block %} &bull; {{ bet.option.block.name }}{% endif %}</div>
+            <div class="ticket-meta">{{ bet.placed_at|date:"d M Y H:i" }}</div>
+          </div>
+        </div>
+        <div class="ticket-amounts">
+          <span class="ticket-stake">S/{{ bet.amount }} @<strong style="color:var(--gold)">{{ bet.odds_at_bet }}</strong></span>
+          <span class="ticket-gain" style="color:var(--accent-lt)">Pot. S/{{ bet.potential_win }}</span>
+        </div>
+      </div>
+      {% empty %}
+      <div class="empty-st"><i class="bi bi-clock"></i><p>No hay apuestas abiertas.</p></div>
+      {% endfor %}
+    </div>
+    <div class="col-lg-6">
+      <h3 style="font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:.85rem"><i class="bi bi-check2-all text-acc me-1"></i>Resueltas ({{ resolved|length }})</h3>
+      {% for bet in resolved %}
+      <div class="ticket-card t-{{ bet.status }} mb-2">
+        <div class="ticket-top">
+          <div class="ticket-icon">{% if bet.status == 'won' %}<i class="bi bi-check-circle-fill"></i>{% else %}<i class="bi bi-x-circle-fill"></i>{% endif %}</div>
+          <div style="flex:1">
+            <div class="ticket-name">{{ bet.option.group_name }}</div>
+            <div class="ticket-meta">{{ bet.option.contest.name }} &bull; {{ bet.option.get_bet_type_display }}</div>
+            <div class="ticket-meta">{{ bet.placed_at|date:"d M Y H:i" }}</div>
+          </div>
+        </div>
+        <div class="ticket-amounts">
+          <span class="ticket-stake">S/{{ bet.amount }} @{{ bet.odds_at_bet }}</span>
+          <span class="ticket-gain">{% if bet.status == 'won' %}+S/{{ bet.potential_win }}{% else %}-S/{{ bet.amount }}{% endif %}</span>
+        </div>
+      </div>
+      {% empty %}
+      <div class="empty-st"><i class="bi bi-check2-all"></i><p>No hay apuestas resueltas aun.</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,88 @@
+﻿{% extends 'base.html' %}
+{% block title %}Apuestas - StakeFolclor{% endblock %}
+
+{% block extra_css %}
+<style>
+.wallet-bar {
+  background: linear-gradient(135deg, rgba(168,85,247,.15), rgba(124,58,237,.08));
+  border: 1px solid rgba(168,85,247,.25);
+  border-radius: 12px;
+  padding: 1.1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+.wallet-amount {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--sf-accent-light);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container section-pad">
+  <div class="mb-4">
+    <h1 class="sf-section-title">Apuestas</h1>
+    <p style="color:var(--sf-text-muted);">Elige un concurso para ver las opciones disponibles</p>
+  </div>
+
+  <!-- Saldo -->
+  {% if user.is_authenticated %}
+  {% with wallet=user.wallet %}
+  <div class="wallet-bar">
+    <i class="bi bi-wallet2" style="font-size:1.8rem;color:var(--sf-accent);"></i>
+    <div>
+      <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;color:var(--sf-text-muted);">Tu saldo virtual</div>
+      <div class="wallet-amount">S/ {{ wallet.balance|floatformat:2 }}</div>
+    </div>
+    <div class="ms-auto">
+      <a href="{% url 'bets:my_bets' %}" class="btn-sf-outline" style="font-size:.82rem;">
+        <i class="bi bi-ticket-perforated"></i>Mis Tickets
+      </a>
+    </div>
+  </div>
+  {% endwith %}
+  {% endif %}
+
+  <div class="row g-4">
+    {% for contest in contests %}
+    <div class="col-sm-6 col-lg-4">
+      <div class="sf-card h-100">
+        {% if contest.flyer %}
+        <img src="{{ contest.flyer.url }}" alt="{{ contest.name }}"
+             style="width:100%;height:160px;object-fit:cover;">
+        {% else %}
+        <div style="width:100%;height:160px;background:var(--sf-surface2);display:flex;align-items:center;justify-content:center;">
+          <i class="bi bi-trophy" style="font-size:3rem;color:var(--sf-text-muted);"></i>
+        </div>
+        {% endif %}
+        <div class="sf-card-body">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge-{{ contest.status }}">
+              {% if contest.status == 'active' %}En Curso
+              {% elif contest.status == 'final' %}En Final
+              {% else %}Proximo{% endif %}
+            </span>
+          </div>
+          <h3 style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:.5rem;">{{ contest.name }}</h3>
+          <p style="color:var(--sf-text-muted);font-size:.8rem;margin-bottom:1rem;">
+            <i class="bi bi-calendar3 me-1"></i>{{ contest.date|date:"d M Y" }}
+          </p>
+          <a href="{% url 'bets:lobby' contest.slug %}" class="btn-sf w-100 justify-content-center">
+            <i class="bi bi-lightning-charge-fill"></i>Ver Apuestas
+          </a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+      <i class="bi bi-trophy" style="font-size:3rem;color:var(--sf-text-muted);display:block;margin-bottom:1rem;"></i>
+      <p style="color:var(--sf-text-muted);">No hay concursos disponibles para apostar.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

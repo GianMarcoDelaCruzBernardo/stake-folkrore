@@ -1,0 +1,30 @@
+﻿{% load static %}
+<div class="contest-card-premium">
+  <div class="cc-img-wrap">
+    {% if contest.flyer %}
+    <img src="{{ contest.flyer.url }}" class="cc-img" alt="{{ contest.name }}" loading="lazy">
+    {% else %}
+    <div class="cc-img-ph"><i class="bi bi-music-note-beamed"></i></div>
+    {% endif %}
+
+    <span class="cc-badge cc-badge-{{ contest.status }}">
+      {% if contest.status == 'upcoming' %}Próximo
+      {% elif contest.status == 'active' %}En Curso
+      {% elif contest.status == 'final' %}En Final
+      {% else %}Finalizado{% endif %}
+    </span>
+
+    <div class="cc-date-box">
+      <div class="cc-date-day">{{ contest.date|date:"d" }}</div>
+      <div class="cc-date-month">{{ contest.date|date:"M Y" }}</div>
+    </div>
+  </div>
+
+  <div class="cc-body">
+    <h3 class="cc-title">{{ contest.name }}</h3>
+    <div class="cc-meta"><i class="bi bi-geo-alt-fill"></i>{{ contest.location }}</div>
+    <a href="{% url 'contests:detail' contest.slug %}" class="cc-enter">
+      <i class="bi bi-arrow-right-circle"></i>Ver Concurso
+    </a>
+  </div>
+</div>

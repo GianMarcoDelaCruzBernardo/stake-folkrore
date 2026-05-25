@@ -1,0 +1,333 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}StakeFolclor{% endblock %}</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons + Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- CSS del sistema -->
+  <link href="{% static 'css/main.css' %}" rel="stylesheet">
+  <!-- CSS hero + tema -->
+  <link href="{% static 'css/hero.css' %}" rel="stylesheet">
+
+  <!-- Tema antes del render para evitar flash -->
+  <script>
+    (function(){
+      var t = localStorage.getItem('sf-theme') ||
+              (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════════════════════════ -->
+<nav class="sf-nav">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between gap-2" style="height:var(--nav-h,70px)">
+
+      <!-- Brand con logo -->
+      <a class="sf-brand" href="{% url 'core:home' %}">
+        <img src="/media/img/logohome.png"
+             alt="StakeFolclor"
+             class="sf-brand-logo-img"
+             onerror="this.style.display='none'">
+        <span class="sf-brand-text">
+          <span class="sf-brand-name">StakeFolclor</span>
+          <span class="sf-brand-sub">Pasión que nos une</span>
+        </span>
+      </a>
+
+      <!-- Links desktop -->
+      <div class="d-none d-lg-flex align-items-center gap-1 flex-grow-1 justify-content-center">
+        <a class="nav-link-sf" href="{% url 'core:home' %}">
+          <i class="bi bi-house"></i>Inicio
+        </a>
+        <a class="nav-link-sf" href="{% url 'contests:list' %}">
+          <i class="bi bi-trophy"></i>Concursos
+        </a>
+        {% if user.is_authenticated %}
+        <a class="nav-link-sf" href="{% url 'bets:list' %}">
+          <i class="bi bi-lightning-charge"></i>Apuestas
+        </a>
+        <a class="nav-link-sf" href="{% url 'predictions:my_predictions' %}">
+          <i class="bi bi-graph-up"></i>Predicciones
+        </a>
+        {% endif %}
+      </div>
+
+      <!-- Derecha desktop -->
+      <div class="d-none d-lg-flex align-items-center gap-2">
+        <!-- Toggle tema -->
+        <button class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Cambiar tema">
+          <i class="bi bi-moon-stars-fill"></i>
+        </button>
+
+        {% if user.is_authenticated %}
+          <!-- Saldo — SIN link, solo display -->
+          {% if user.wallet %}
+          <span class="nav-wallet-display">
+            <i class="bi bi-wallet2"></i>S/ {{ user.wallet.balance|floatformat:2 }}
+          </span>
+          {% endif %}
+
+          <!-- Botón Tickets — abre drawer -->
+          <button class="btn-tickets" id="nav-tickets-btn" type="button" title="Mis tickets">
+            <i class="bi bi-ticket-perforated"></i>Tickets
+            <span class="btn-tickets-badge">{{ user.bets.all|length }}</span>
+          </button>
+
+          <!-- Salir -->
+          <a class="btn-sf-out btn-sm-sf" href="{% url 'accounts:logout' %}">
+            <i class="bi bi-box-arrow-right"></i>Salir
+          </a>
+        {% else %}
+          <a class="nav-link-sf" href="{% url 'accounts:login' %}">
+            <i class="bi bi-person"></i>Ingresar
+          </a>
+          <a class="btn-sf btn-sm-sf" href="{% url 'accounts:register' %}">
+            Registro Gratis
+          </a>
+        {% endif %}
+      </div>
+
+      <!-- Mobile: toggle -->
+      <button class="btn-sf-out btn-sm-sf d-lg-none"
+              style="padding:.38rem .7rem"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#mobileMenu">
+        <i class="bi bi-list" style="font-size:1.15rem"></i>
+      </button>
+
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════
+     OFFCANVAS MOBILE
+═══════════════════════════════════════════════════════════ -->
+<div class="offcanvas offcanvas-start sf-offcanvas"
+     tabindex="-1"
+     id="mobileMenu">
+  <div class="offcanvas-header">
+    <a class="sf-brand" href="{% url 'core:home' %}">
+      <img src="/media/img/logohome.png" alt="" class="sf-brand-logo-img"
+           onerror="this.style.display='none'">
+      <span class="sf-brand-text">
+        <span class="sf-brand-name">StakeFolclor</span>
+        <span class="sf-brand-sub">Pasión que nos une</span>
+      </span>
+    </a>
+    <button type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body d-flex flex-column gap-2">
+
+    <a class="nav-link-sf" href="{% url 'core:home' %}">
+      <i class="bi bi-house"></i>Inicio
+    </a>
+    <a class="nav-link-sf" href="{% url 'contests:list' %}">
+      <i class="bi bi-trophy"></i>Concursos
+    </a>
+
+    {% if user.is_authenticated %}
+    <a class="nav-link-sf" href="{% url 'bets:list' %}">
+      <i class="bi bi-lightning-charge"></i>Apuestas
+    </a>
+    <a class="nav-link-sf" href="{% url 'predictions:my_predictions' %}">
+      <i class="bi bi-graph-up"></i>Predicciones
+    </a>
+
+    {% if user.wallet %}
+    <div style="padding:.8rem 1rem;background:var(--gold-dim);border:1px solid rgba(201,148,58,.22);border-radius:10px;margin-top:.25rem">
+      <div style="font-size:.62rem;letter-spacing:.8px;text-transform:uppercase;color:var(--text-muted);font-family:'Poppins',sans-serif;margin-bottom:.2rem">Saldo virtual</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:700;color:var(--gold)">S/ {{ user.wallet.balance|floatformat:2 }}</div>
+    </div>
+    {% endif %}
+
+    <!-- Tickets mobile -->
+    <button class="btn-tickets" id="nav-tickets-btn-mobile" type="button"
+            onclick="document.getElementById('mobileMenu').__bs_offcanvas__?.hide();setTimeout(function(){document.getElementById('nav-tickets-btn')?.click()},300)">
+      <i class="bi bi-ticket-perforated"></i>Mis Tickets
+      <span class="btn-tickets-badge" style="position:static;margin-left:.25rem">{{ user.bets.all|length }}</span>
+    </button>
+
+    <div style="border-top:1px solid var(--card-border);margin:.4rem 0;padding-top:.7rem;display:flex;align-items:center;gap:.75rem">
+      <button class="theme-toggle-btn" onclick="toggleTheme()" style="flex-shrink:0">
+        <i class="bi bi-moon-stars-fill"></i>
+      </button>
+      <span style="font-size:.78rem;color:var(--text-muted);font-family:'Poppins',sans-serif">Cambiar tema</span>
+    </div>
+
+    <a class="btn-sf-out" href="{% url 'accounts:logout' %}" style="margin-top:.2rem">
+      <i class="bi bi-box-arrow-right"></i>Salir
+    </a>
+
+    {% else %}
+
+    <div style="border-top:1px solid var(--card-border);margin:.4rem 0"></div>
+    <a class="nav-link-sf" href="{% url 'accounts:login' %}">
+      <i class="bi bi-person"></i>Ingresar
+    </a>
+    <a class="btn-sf" href="{% url 'accounts:register' %}">
+      <i class="bi bi-person-plus"></i>Registro Gratis
+    </a>
+
+    <div style="padding:.5rem 0;display:flex;align-items:center;gap:.75rem">
+      <button class="theme-toggle-btn" onclick="toggleTheme()" style="flex-shrink:0">
+        <i class="bi bi-moon-stars-fill"></i>
+      </button>
+      <span style="font-size:.78rem;color:var(--text-muted);font-family:'Poppins',sans-serif">Cambiar tema</span>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     MESSAGES
+═══════════════════════════════════════════════════════════ -->
+{% if messages %}
+<div class="container mt-3" style="position:relative;z-index:100">
+  {% for m in messages %}
+  <div class="sf-alert sf-alert-auto sf-alert-{% if m.tags == 'error' %}error{% elif m.tags == 'success' %}success{% else %}info{% endif %}">
+    <i class="bi {% if m.tags == 'error' %}bi-x-circle{% elif m.tags == 'success' %}bi-check-circle{% else %}bi-info-circle{% endif %}"></i>
+    {{ m }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- ═══════════════════════════════════════════════════════
+     CONTENT
+═══════════════════════════════════════════════════════════ -->
+{% block content %}{% endblock %}
+
+<!-- ═══════════════════════════════════════════════════════
+     TICKET DRAWER (solo si autenticado)
+═══════════════════════════════════════════════════════════ -->
+{% if user.is_authenticated %}
+
+<!-- Overlay -->
+<div id="drawer-overlay" style="display:none"></div>
+
+<!-- Drawer -->
+<div id="ticket-drawer">
+  <div class="drawer-header">
+    <span class="drawer-title">
+      <i class="bi bi-ticket-perforated me-2" style="color:var(--gold)"></i>Mis Tickets
+    </span>
+    <button id="drawer-close" title="Cerrar">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+  <div class="drawer-tabs">
+    <div class="drawer-tab active" data-tab="dp-pending">Abiertas</div>
+    <div class="drawer-tab" data-tab="dp-resolved">Resueltas</div>
+  </div>
+  <div class="drawer-body">
+
+    <!-- Panel pendientes -->
+    <div id="dp-pending" class="drawer-panel">
+      {% for bet in user.bets.all %}
+      {% if bet.status == 'pending' %}
+      <div class="ticket-card t-pending">
+        <div class="ticket-top">
+          <div class="ticket-icon"><i class="bi bi-clock"></i></div>
+          <div>
+            <div class="ticket-name">{{ bet.option.group_name }}</div>
+            <div class="ticket-meta">
+              {{ bet.option.contest.name }}
+              {% if bet.option.block %} &bull; {{ bet.option.block.name }}{% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="ticket-amounts">
+          <span class="ticket-stake">
+            S/{{ bet.amount }} @<strong style="color:var(--gold)">{{ bet.odds_at_bet }}</strong>
+          </span>
+          <span class="ticket-gain t-pending">S/{{ bet.potential_win }}</span>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- Panel resueltas -->
+    <div id="dp-resolved" class="drawer-panel" style="display:none">
+      {% for bet in user.bets.all %}
+      {% if bet.status != 'pending' %}
+      <div class="ticket-card t-{{ bet.status }}">
+        <div class="ticket-top">
+          <div class="ticket-icon">
+            {% if bet.status == 'won' %}
+              <i class="bi bi-check-circle-fill"></i>
+            {% else %}
+              <i class="bi bi-x-circle-fill"></i>
+            {% endif %}
+          </div>
+          <div>
+            <div class="ticket-name">{{ bet.option.group_name }}</div>
+            <div class="ticket-meta">{{ bet.option.contest.name }}</div>
+          </div>
+        </div>
+        <div class="ticket-amounts">
+          <span class="ticket-stake">S/{{ bet.amount }} @{{ bet.odds_at_bet }}</span>
+          <span class="ticket-gain">
+            {% if bet.status == 'won' %}+S/{{ bet.potential_win }}{% else %}-S/{{ bet.amount }}{% endif %}
+          </span>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+<!-- FAB Ticket -->
+<button id="ticket-fab" title="Mis Tickets">
+  <i class="bi bi-ticket-perforated"></i>
+  <span class="fab-badge">{{ user.bets.all|length }}</span>
+</button>
+
+{% endif %}
+
+<!-- ═══════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════════ -->
+<footer class="sf-footer">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <div class="sf-footer-brand mb-1">StakeFolclor</div>
+        <small>Plataforma de concursos folklóricos del Perú</small>
+      </div>
+      <div class="col-md-6 text-md-end mt-2 mt-md-0">
+        <small>&copy; 2025 StakeFolclor &mdash; Saldo virtual para entretenimiento.</small>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/hero.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

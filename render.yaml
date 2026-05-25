@@ -1,0 +1,15 @@
+﻿services:
+  - type: web
+    name: stakefolclor
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn stakefolclor.wsgi:application"
+    envVars:
+      - key: DEBUG
+        value: False
+
+      - key: PYTHON_VERSION
+        value: 3.11.9
+
+      - key: WEB_CONCURRENCY
+        value: 4

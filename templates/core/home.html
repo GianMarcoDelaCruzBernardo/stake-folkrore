@@ -1,0 +1,250 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block title %}StakeFolclor — Concursos Folklóricos del Perú{% endblock %}
+
+{% block content %}
+
+<!-- ══════════════════════════════════════════════════════════
+     HERO SECTION
+══════════════════════════════════════════════════════════════ -->
+<section class="cf-hero-wrap">
+  <div class="cf-hero-bg-img"></div>
+  <div class="cf-hero-overlay"></div>
+
+  <div class="container position-relative" style="z-index:2">
+    <div class="row">
+      <div class="col-lg-6 col-xl-5">
+        <div class="cf-hero-content">
+
+          <div class="hero-eyebrow">
+            <span class="hero-eyebrow-line"></span>
+            Plataforma Oficial
+          </div>
+
+          <h1 class="hero-main-title">
+            Donde la tradición<br>
+            danza con la
+            <span class="gold-word">historia</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            Sigue puntajes, realiza predicciones y apuesta en los
+            grandes concursos de danza folklórica del Perú.
+          </p>
+
+          <div class="hero-actions">
+            <a href="{% url 'contests:list' %}" class="hero-btn-primary">
+              <i class="bi bi-trophy-fill"></i>Ver Concursos
+            </a>
+            <a href="{% url 'contests:list' %}" class="hero-btn-secondary">
+              <i class="bi bi-compass"></i>Explorar Danzas
+            </a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <div class="hero-stat-icon"><i class="bi bi-people-fill"></i></div>
+              <div>
+                <div class="hero-stat-val">
+                  <span class="stat-counter" data-target="120" data-prefix="+" data-suffix="">+120</span>
+                </div>
+                <div class="hero-stat-lbl">Concursos realizados</div>
+              </div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-icon"><i class="bi bi-person-check-fill"></i></div>
+              <div>
+                <div class="hero-stat-val">
+                  <span class="stat-counter" data-target="80" data-prefix="+" data-suffix="K">+80K</span>
+                </div>
+                <div class="hero-stat-lbl">Usuarios activos</div>
+              </div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+              <div>
+                <div class="hero-stat-val">
+                  <span class="stat-counter" data-target="1200" data-prefix="+" data-suffix="K">+1.2K</span>
+                </div>
+                <div class="hero-stat-lbl">Apuestas realizadas</div>
+              </div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-icon"><i class="bi bi-graph-up-arrow"></i></div>
+              <div>
+                <div class="hero-stat-val">
+                  <span class="stat-counter" data-target="95" data-prefix="" data-suffix="%">95%</span>
+                </div>
+                <div class="hero-stat-lbl">Predicciones acertadas</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <i class="bi bi-chevron-double-down"></i>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     CONCURSOS
+══════════════════════════════════════════════════════════════ -->
+<div class="container">
+
+  {% if active %}
+  <section class="home-section-pad">
+    <div class="home-section-header">
+      <div>
+        <div class="home-section-label">
+          <i class="bi bi-circle-fill" style="font-size:.4rem;animation:pulse-live 1.5s infinite"></i>
+          En vivo ahora
+        </div>
+        <h2 class="home-section-title">Concursos en Curso</h2>
+      </div>
+      <a href="{% url 'contests:list' %}" class="home-see-all">
+        Ver todos <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+    <div class="contest-cards-row">
+      {% for contest in active %}
+        {% include 'components/contest_card_premium.html' with contest=contest %}
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if upcoming %}
+  <section class="home-section-pad" style="padding-top:{% if active %}0{% else %}4.5rem{% endif %}">
+    <div class="home-section-header">
+      <div>
+        <div class="home-section-label">Próximos eventos</div>
+        <h2 class="home-section-title">Próximos Concursos</h2>
+      </div>
+      <a href="{% url 'contests:list' %}" class="home-see-all">
+        Ver todos <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+    <div class="contest-cards-row">
+      {% for contest in upcoming %}
+        {% include 'components/contest_card_premium.html' with contest=contest %}
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if finished %}
+  <section class="home-section-pad" style="padding-top:0">
+    <div class="home-section-header">
+      <div>
+        <div class="home-section-label">Resultados</div>
+        <h2 class="home-section-title">Concursos Recientes</h2>
+      </div>
+      <a href="{% url 'contests:list' %}" class="home-see-all">
+        Ver todos <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+    <div class="contest-cards-row">
+      {% for contest in finished %}
+        {% include 'components/contest_card_premium.html' with contest=contest %}
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if not active and not upcoming and not finished %}
+  <section class="home-section-pad text-center" style="padding:7rem 0">
+    <div style="width:72px;height:72px;background:var(--gold-dim);border:1px solid rgba(201,148,58,.18);
+                border-radius:50%;display:flex;align-items:center;justify-content:center;
+                margin:0 auto 1.3rem;font-size:1.9rem;color:var(--gold)">
+      <i class="bi bi-calendar-x"></i>
+    </div>
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.45rem;color:var(--text-body);margin-bottom:.55rem">
+      Sin concursos activos
+    </h3>
+    <p style="font-family:'Poppins',sans-serif;font-size:.88rem;color:var(--text-muted);max-width:380px;margin:0 auto">
+      Pronto habrá nuevos concursos. Regístrate para recibir notificaciones.
+    </p>
+    {% if not user.is_authenticated %}
+    <a href="{% url 'accounts:register' %}" class="hero-btn-primary d-inline-flex mt-4">
+      <i class="bi bi-person-plus"></i>Registrarse Gratis
+    </a>
+    {% endif %}
+  </section>
+  {% endif %}
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FEATURES STRIP
+══════════════════════════════════════════════════════════════ -->
+<section class="features-strip">
+  <div class="container">
+    <div class="row g-3">
+      <div class="col-6 col-md-3">
+        <div class="feature-item">
+          <div class="feature-icon"><i class="bi bi-cash-coin"></i></div>
+          <div class="feature-title">Apuesta con pasión</div>
+          <div class="feature-desc">Participa y gana saldo virtual apostando en concursos.</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="feature-item">
+          <div class="feature-icon"><i class="bi bi-graph-up"></i></div>
+          <div class="feature-title">Predice y gana</div>
+          <div class="feature-desc">Usa tus conocimientos para predecir los clasificados.</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="feature-item">
+          <div class="feature-icon"><i class="bi bi-music-note-beamed"></i></div>
+          <div class="feature-title">Vive la cultura</div>
+          <div class="feature-desc">Disfruta lo mejor del folclore peruano en tiempo real.</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="feature-item">
+          <div class="feature-icon"><i class="bi bi-people-fill"></i></div>
+          <div class="feature-title">Comunidad</div>
+          <div class="feature-desc">Únete a miles de amantes del folclore peruano.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     CTA BANNER (solo no autenticados)
+══════════════════════════════════════════════════════════════ -->
+{% if not user.is_authenticated %}
+<section style="background:linear-gradient(135deg,var(--gold-dim),transparent);
+                border-top:1px solid var(--card-border);
+                border-bottom:1px solid var(--card-border);
+                padding:3.5rem 0;margin-top:1rem">
+  <div class="container text-center">
+    <div class="home-section-label justify-content-center mb-2">Únete ahora</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;
+               color:var(--text-body);margin-bottom:.7rem">
+      Comienza con <span style="color:var(--gold)">S/ 50 virtuales</span> de regalo
+    </h2>
+    <p style="font-family:'Poppins',sans-serif;font-size:.9rem;color:var(--text-muted);
+              max-width:420px;margin:0 auto 1.85rem;line-height:1.75">
+      Regístrate gratis y recibe saldo virtual para apostar en tus concursos folklóricos favoritos.
+    </p>
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+      <a href="{% url 'accounts:register' %}" class="hero-btn-primary">
+        <i class="bi bi-person-plus"></i>Registro Gratuito
+      </a>
+      <a href="{% url 'accounts:login' %}" class="hero-btn-secondary">
+        <i class="bi bi-box-arrow-in-right"></i>Ya tengo cuenta
+      </a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

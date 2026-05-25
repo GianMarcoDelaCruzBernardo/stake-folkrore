@@ -1,0 +1,63 @@
+﻿{% extends 'base.html' %}
+{% block title %}Registro - StakeFolclor{% endblock %}
+{% block content %}
+<div class="container section-pad">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="text-center mb-4">
+        <p class="sf-brand" style="font-size:2rem;">Stake<span style="color:var(--sf-text);">Folclor</span></p>
+        <p style="color:var(--sf-text-muted);font-size:0.875rem;">Crea tu cuenta gratuita</p>
+      </div>
+      <div class="sf-auth-card">
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label"><i class="bi bi-person me-1"></i>Nombre de usuario</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+            <div class="sf-alert sf-alert-error mt-1" style="padding:0.4rem 0.75rem;font-size:0.8rem;">
+              {{ form.username.errors.0 }}
+            </div>
+            {% endif %}
+          </div>
+          <div class="mb-3">
+            <label class="form-label"><i class="bi bi-envelope me-1"></i>Correo electronico</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+            <div class="sf-alert sf-alert-error mt-1" style="padding:0.4rem 0.75rem;font-size:0.8rem;">
+              {{ form.email.errors.0 }}
+            </div>
+            {% endif %}
+          </div>
+          <div class="mb-3">
+            <label class="form-label"><i class="bi bi-lock me-1"></i>Contrasena</label>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+            <div class="sf-alert sf-alert-error mt-1" style="padding:0.4rem 0.75rem;font-size:0.8rem;">
+              {{ form.password1.errors.0 }}
+            </div>
+            {% endif %}
+          </div>
+          <div class="mb-4">
+            <label class="form-label"><i class="bi bi-lock-fill me-1"></i>Confirmar contrasena</label>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+            <div class="sf-alert sf-alert-error mt-1" style="padding:0.4rem 0.75rem;font-size:0.8rem;">
+              {{ form.password2.errors.0 }}
+            </div>
+            {% endif %}
+          </div>
+          <button type="submit" class="btn-sf w-100 justify-content-center">
+            <i class="bi bi-person-check"></i>Crear cuenta
+          </button>
+        </form>
+        <hr class="sf-divider">
+        <p class="text-center" style="color:var(--sf-text-muted);font-size:0.875rem;">
+          Ya tienes cuenta?
+          <a href="{% url 'accounts:login' %}" style="color:var(--sf-accent);text-decoration:none;font-weight:500;">Ingresar</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

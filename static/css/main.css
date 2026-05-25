@@ -1,0 +1,556 @@
+﻿/* =====================================================
+   StakeFolclor v2 — Main CSS
+   Inspirado en Stake / Betano / DraftKings
+   ===================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg:        #07080f;
+  --bg2:       #0c0d18;
+  --surface:   #111220;
+  --surface2:  #181928;
+  --surface3:  #1e2033;
+  --border:    rgba(139,92,246,.12);
+  --border2:   rgba(139,92,246,.28);
+  --accent:    #7c3aed;
+  --accent2:   #6d28d9;
+  --accent-lt: #a78bfa;
+  --gold:      #f59e0b;
+  --silver:    #94a3b8;
+  --green:     #10b981;
+  --red:       #ef4444;
+  --text:      #e2e8f0;
+  --text2:     #94a3b8;
+  --text3:     #475569;
+  --r:         10px;
+  --r2:        16px;
+  --sh:        0 4px 24px rgba(0,0,0,.5);
+  --sh-accent: 0 4px 32px rgba(124,58,237,.25);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+
+/* ── NAVBAR ─────────────────────────────────────────── */
+.sf-nav{
+  background:rgba(7,8,15,.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:.7rem 0;
+  position:sticky;top:0;z-index:900;
+}
+.sf-brand{
+  font-family:'Rajdhani',sans-serif;font-size:1.55rem;font-weight:700;
+  color:var(--accent-lt);text-decoration:none;letter-spacing:.5px;
+}
+.sf-brand span{color:var(--text)}
+
+.nav-link-sf{
+  color:var(--text2);text-decoration:none;font-size:.82rem;font-weight:500;
+  padding:.35rem .7rem;border-radius:7px;transition:all .2s;white-space:nowrap;
+  display:flex;align-items:center;gap:.3rem;
+}
+.nav-link-sf:hover,.nav-link-sf.active{color:var(--accent-lt);background:rgba(124,58,237,.1)}
+
+.nav-wallet{
+  font-family:'Rajdhani',sans-serif;font-size:.92rem;font-weight:700;
+  color:var(--accent-lt);padding:.3rem .75rem;
+  background:rgba(124,58,237,.12);border:1px solid var(--border2);
+  border-radius:8px;text-decoration:none;display:flex;align-items:center;gap:.4rem;
+  transition:background .2s;
+}
+.nav-wallet:hover{background:rgba(124,58,237,.2);color:var(--accent-lt)}
+
+/* ── BUTTONS ─────────────────────────────────────────── */
+.btn-sf{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;border:none;padding:.55rem 1.25rem;border-radius:8px;
+  font-weight:600;font-size:.83rem;text-decoration:none;
+  display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;
+  transition:all .2s;letter-spacing:.2px;
+}
+.btn-sf:hover{opacity:.88;transform:translateY(-1px);box-shadow:var(--sh-accent);color:#fff}
+.btn-sf:active{transform:translateY(0)}
+
+.btn-sf-out{
+  background:transparent;color:var(--accent-lt);
+  border:1px solid var(--border2);padding:.5rem 1.1rem;border-radius:8px;
+  font-weight:500;font-size:.82rem;text-decoration:none;
+  display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;transition:all .2s;
+}
+.btn-sf-out:hover{background:rgba(124,58,237,.1);color:var(--accent-lt)}
+
+.btn-sm-sf{padding:.3rem .75rem;font-size:.77rem}
+
+/* ── CARDS ───────────────────────────────────────────── */
+.card-sf{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r2);overflow:hidden;transition:all .3s;
+}
+.card-sf:hover{border-color:var(--border2);box-shadow:var(--sh-accent)}
+.card-body-sf{padding:1.4rem}
+
+/* ── CONTEST CARDS ───────────────────────────────────── */
+.contest-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r2);overflow:hidden;transition:all .3s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;height:100%;
+}
+.contest-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:var(--sh-accent)}
+.contest-card-img{width:100%;height:200px;object-fit:cover}
+.contest-card-ph{width:100%;height:200px;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:2.5rem}
+.contest-card-body{padding:1.25rem;flex:1;display:flex;flex-direction:column}
+.contest-card-title{font-family:'Rajdhani',sans-serif;font-size:1.15rem;font-weight:700;line-height:1.3;margin-bottom:.4rem}
+.contest-card-meta{font-size:.76rem;color:var(--text2);display:flex;flex-direction:column;gap:.25rem;margin-bottom:1rem}
+.contest-card-meta span{display:flex;align-items:center;gap:.35rem}
+
+/* ── BADGES ──────────────────────────────────────────── */
+.bdg{display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .65rem;border-radius:5px;font-size:.67rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.bdg-upcoming{background:rgba(245,158,11,.12);color:var(--gold);border:1px solid rgba(245,158,11,.25)}
+.bdg-active{background:rgba(16,185,129,.12);color:var(--green);border:1px solid rgba(16,185,129,.25);animation:pulse-g 2s infinite}
+.bdg-final{background:rgba(245,158,11,.18);color:var(--gold);border:1px solid rgba(245,158,11,.35)}
+.bdg-finished{background:rgba(148,163,184,.1);color:var(--silver);border:1px solid rgba(148,163,184,.2)}
+@keyframes pulse-g{0%,100%{opacity:1}50%{opacity:.65}}
+
+/* ── TABLES ──────────────────────────────────────────── */
+.sf-table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.sf-table{width:100%;border-collapse:collapse}
+.sf-table thead tr{background:linear-gradient(90deg,rgba(124,58,237,.18),rgba(124,58,237,.06));border-bottom:1px solid var(--border)}
+.sf-table thead th{padding:.8rem 1rem;font-size:.7rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--accent-lt);text-align:center}
+.sf-table thead th:first-child,.sf-table thead th:nth-child(2){text-align:left}
+.sf-table tbody tr{border-bottom:1px solid rgba(124,58,237,.05);transition:background .15s}
+.sf-table tbody tr:hover{background:rgba(124,58,237,.04)}
+.sf-table tbody tr:last-child{border-bottom:none}
+.sf-table tbody td{padding:.8rem 1rem;font-size:.84rem;color:var(--text);text-align:center}
+.sf-table tbody td:first-child{text-align:center;width:44px}
+.sf-table tbody td:nth-child(2){text-align:left}
+.sf-table .qualified-row{background:rgba(16,185,129,.04)!important}
+.sf-table .qualified-row:hover{background:rgba(16,185,129,.07)!important}
+
+.rank-num{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;color:var(--text3)}
+.rank-1{color:var(--gold)}.rank-2{color:var(--silver)}.rank-3{color:#cd7f32}
+.score-val{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.95rem}
+.score-total{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.05rem;color:var(--accent-lt)}
+.score-null{color:var(--text3)}
+.grp-logo{width:34px;height:34px;border-radius:7px;object-fit:cover;border:1px solid var(--border)}
+.grp-logo-ph{width:34px;height:34px;border-radius:7px;background:var(--surface2);display:inline-flex;align-items:center;justify-content:center;color:var(--text3);font-size:.75rem;border:1px solid var(--border)}
+
+/* ── BLOCK HEADER ────────────────────────────────────── */
+.blk-hdr{display:flex;align-items:center;gap:.65rem;padding:.75rem 1.25rem;background:linear-gradient(90deg,rgba(124,58,237,.1),transparent);border-left:3px solid var(--accent);border-radius:0 var(--r) var(--r) 0;margin-bottom:.85rem}
+.blk-title{font-family:'Rajdhani',sans-serif;font-size:1.25rem;font-weight:700;color:var(--text)}
+.blk-final-bdg{background:linear-gradient(135deg,var(--gold),#d97706);color:#070a0f;padding:.18rem .65rem;border-radius:5px;font-size:.65rem;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+
+/* ── PODIO ───────────────────────────────────────────── */
+.podio-wrap{display:flex;align-items:flex-end;justify-content:center;gap:1rem;padding:2rem 1rem 0}
+.podio-item{display:flex;flex-direction:column;align-items:center;gap:.6rem}
+.podio-logo{border-radius:50%;object-fit:cover;border:3px solid}
+.podio-logo-ph{border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid}
+.podio-1 .podio-logo,.podio-1 .podio-logo-ph{width:80px;height:80px;border-color:var(--gold)}
+.podio-2 .podio-logo,.podio-2 .podio-logo-ph{width:65px;height:65px;border-color:var(--silver)}
+.podio-3 .podio-logo,.podio-3 .podio-logo-ph{width:60px;height:60px;border-color:#cd7f32}
+.podio-platform{display:flex;align-items:center;justify-content:center;border-radius:var(--r) var(--r) 0 0;font-family:'Rajdhani',sans-serif}
+.podio-1 .podio-platform{width:120px;height:120px;background:linear-gradient(180deg,rgba(245,158,11,.25),rgba(245,158,11,.08));border:1px solid rgba(245,158,11,.35)}
+.podio-2 .podio-platform{width:100px;height:90px;background:linear-gradient(180deg,rgba(148,163,184,.15),rgba(148,163,184,.04));border:1px solid rgba(148,163,184,.25)}
+.podio-3 .podio-platform{width:90px;height:70px;background:linear-gradient(180deg,rgba(180,83,9,.15),rgba(180,83,9,.04));border:1px solid rgba(180,83,9,.25)}
+.podio-pos{font-size:1.9rem;font-weight:700}
+.podio-1 .podio-pos{color:var(--gold)}.podio-2 .podio-pos{color:var(--silver)}.podio-3 .podio-pos{color:#cd7f32}
+.podio-name{font-size:.74rem;font-weight:600;text-align:center;max-width:110px;line-height:1.25;color:var(--text)}
+.podio-pts{font-size:.72rem;color:var(--text2)}
+
+/* ── HERO ────────────────────────────────────────────── */
+.sf-hero{
+  background:linear-gradient(135deg,var(--bg) 0%,var(--bg2) 60%,var(--surface) 100%);
+  padding:4.5rem 0 3.5rem;position:relative;overflow:hidden;
+}
+.sf-hero::before{
+  content:'';position:absolute;top:-40%;left:-5%;
+  width:550px;height:550px;border-radius:50%;
+  background:radial-gradient(circle,rgba(124,58,237,.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-title{font-family:'Rajdhani',sans-serif;font-size:clamp(2.2rem,5vw,4rem);font-weight:700;line-height:1.1;color:var(--text)}
+.hero-title .acc{color:var(--accent-lt)}
+
+/* ── SECTION TITLE ───────────────────────────────────── */
+.sec-title{font-family:'Rajdhani',sans-serif;font-size:1.65rem;font-weight:700;color:var(--text);position:relative;display:inline-block;margin-bottom:.15rem}
+.sec-title::after{content:'';display:block;height:2px;width:45%;background:linear-gradient(90deg,var(--accent),transparent);margin-top:3px}
+
+/* ── BET OPTION CARDS ────────────────────────────────── */
+.bet-opt{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:.8rem 1rem;display:flex;
+  align-items:flex-start;gap:.85rem;margin-bottom:.45rem;
+  transition:border-color .2s,background .2s;
+}
+.bet-opt:hover{border-color:var(--border2);background:rgba(124,58,237,.03)}
+.bet-opt.resolved-won{border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.04)}
+.bet-opt.resolved-lost{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.04)}
+.bet-logo{width:38px;height:38px;border-radius:8px;object-fit:cover;border:1px solid var(--border);flex-shrink:0}
+.bet-logo-ph{width:38px;height:38px;border-radius:8px;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:.85rem;border:1px solid var(--border);flex-shrink:0}
+.bet-name{font-weight:600;font-size:.88rem;color:var(--text);margin-bottom:.15rem}
+.bet-sub{font-size:.71rem;color:var(--text2)}
+.bet-odds-tag{font-family:'Rajdhani',sans-serif;font-size:1.28rem;font-weight:700;color:var(--gold);flex-shrink:0;margin-top:.1rem}
+
+/* Bet amount form */
+.bet-form{display:flex;gap:.35rem;align-items:center;flex-wrap:wrap;margin-top:.45rem}
+.bet-form input[type=number]{
+  width:78px;background:var(--surface2)!important;border:1px solid var(--border)!important;
+  color:var(--text)!important;border-radius:7px!important;padding:.28rem .6rem!important;
+  font-size:.82rem;outline:none;
+}
+.bet-form input[type=number]:focus{border-color:var(--accent)!important;box-shadow:0 0 0 2px rgba(124,58,237,.2)!important}
+.btn-quick{background:rgba(124,58,237,.1);border:1px solid var(--border);color:var(--accent-lt);border-radius:6px;padding:.22rem .5rem;font-size:.7rem;cursor:pointer;transition:background .15s}
+.btn-quick:hover{background:rgba(124,58,237,.22)}
+.gain-prev{font-size:.72rem;color:var(--text2);margin-top:.2rem}
+.gain-prev strong{color:#34d399}
+
+/* ── TICKET SIDEBAR (drawer) ─────────────────────────── */
+#ticket-drawer{
+  position:fixed;right:-380px;top:0;width:360px;height:100vh;
+  background:var(--surface);border-left:1px solid var(--border);
+  z-index:1000;transition:right .3s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;box-shadow:-8px 0 32px rgba(0,0,0,.4);
+}
+#ticket-drawer.open{right:0}
+.drawer-header{padding:1rem 1.2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.drawer-title{font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text)}
+.drawer-close{background:none;border:none;color:var(--text2);font-size:1.2rem;cursor:pointer;padding:.3rem;border-radius:6px;transition:color .2s}
+.drawer-close:hover{color:var(--text)}
+.drawer-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.drawer-tab{flex:1;padding:.65rem;text-align:center;font-size:.78rem;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+.drawer-tab.active{color:var(--accent-lt);border-bottom-color:var(--accent)}
+.drawer-body{flex:1;overflow-y:auto;padding:.75rem}
+
+.ticket-card{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--r);padding:.85rem 1rem;margin-bottom:.5rem;
+  transition:border-color .2s;
+}
+.ticket-card.t-won{border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.04)}
+.ticket-card.t-lost{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.04)}
+.ticket-card.t-pending{border-color:var(--border)}
+.ticket-top{display:flex;align-items:flex-start;gap:.65rem}
+.ticket-icon{font-size:1.1rem;flex-shrink:0;margin-top:2px}
+.t-won  .ticket-icon{color:var(--green)}
+.t-lost .ticket-icon{color:var(--red)}
+.t-pending .ticket-icon{color:var(--text3)}
+.ticket-name{font-weight:600;font-size:.84rem;color:var(--text);margin-bottom:.1rem;line-height:1.3}
+.ticket-meta{font-size:.7rem;color:var(--text2)}
+.ticket-amounts{display:flex;align-items:center;justify-content:space-between;margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--border);font-size:.75rem}
+.ticket-stake{color:var(--text2)}
+.ticket-gain{font-weight:700}
+.t-won .ticket-gain{color:var(--green)}
+.t-lost .ticket-gain{color:var(--red)}
+.t-pending .ticket-gain{color:var(--accent-lt)}
+
+/* FAB ticket button */
+.ticket-fab{
+  position:fixed;right:1.25rem;bottom:1.5rem;z-index:999;
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;color:#fff;box-shadow:0 4px 20px rgba(124,58,237,.5);
+  transition:transform .2s,box-shadow .2s;
+}
+.ticket-fab:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(124,58,237,.65)}
+.ticket-fab .fab-badge{
+  position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;
+  font-size:.62rem;font-weight:700;width:18px;height:18px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;border:2px solid var(--bg);
+}
+
+/* ── PREDICTIONS — poll style ────────────────────────── */
+.poll-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r2);overflow:hidden;transition:all .3s;
+}
+.poll-card:hover{border-color:var(--border2);box-shadow:var(--sh-accent)}
+.poll-header{padding:1.1rem 1.4rem;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
+.poll-body{padding:1rem 1.4rem 1.4rem}
+
+.poll-item{
+  display:flex;align-items:center;gap:.75rem;padding:.6rem .85rem;
+  border-radius:8px;border-left:3px solid;margin-bottom:.38rem;
+  position:relative;overflow:hidden;font-size:.82rem;
+}
+.poll-item::before{
+  content:'';position:absolute;left:0;top:0;height:100%;
+  background:currentColor;opacity:.06;border-radius:0 8px 8px 0;
+  width:var(--bar, 0%);transition:width 1s ease;pointer-events:none;
+}
+.pi-correct{border-color:var(--green);color:var(--green)}
+.pi-wrong{border-color:var(--red);color:var(--red)}
+.pi-pending{border-color:rgba(255,255,255,.1);color:var(--text3)}
+.poll-dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0}
+.poll-lbl{min-width:130px;color:var(--text2);flex-shrink:0;font-size:.73rem}
+.poll-val{flex:1;font-weight:600;color:var(--text)}
+.poll-bdg{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:.12rem .48rem;border-radius:4px;background:currentColor;color:var(--bg);flex-shrink:0}
+
+/* Accuracy bar */
+.acc-strip{padding:.75rem 1.4rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem}
+.acc-bar-bg{flex:1;background:rgba(255,255,255,.06);border-radius:99px;height:6px;overflow:hidden}
+.acc-bar-fill{height:100%;border-radius:99px;transition:width 1.2s ease}
+.acc-high{background:linear-gradient(90deg,var(--green),#34d399)}
+.acc-mid{background:linear-gradient(90deg,var(--gold),#fbbf24)}
+.acc-low{background:linear-gradient(90deg,var(--red),#f87171)}
+.acc-none{background:var(--text3)}
+.acc-pct{font-family:'Rajdhani',sans-serif;font-size:1.55rem;font-weight:700;min-width:50px;text-align:right}
+
+/* ── AD SLOTS ─────────────────────────────────────────── */
+.ad-slot{
+  border-radius:var(--r);overflow:hidden;
+  background:linear-gradient(135deg,rgba(124,58,237,.04),rgba(7,8,15,.8));
+  border:1px dashed rgba(124,58,237,.15);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text3);font-size:.72rem;letter-spacing:.5px;
+  text-transform:uppercase;
+}
+.ad-slot-sidebar{width:100%;min-height:250px}
+.ad-slot-inline{width:100%;min-height:90px;margin:1.5rem 0}
+.ad-slot-mobile{width:100%;min-height:60px;display:none}
+@media(max-width:768px){.ad-slot-mobile{display:flex}.ad-slot-sidebar{display:none}}
+
+/* ── AUTH FORMS ──────────────────────────────────────── */
+.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:2.25rem;box-shadow:var(--sh)}
+.form-control{background:var(--surface2)!important;border:1px solid var(--border)!important;color:var(--text)!important;border-radius:8px!important;padding:.7rem 1rem!important;transition:border-color .2s!important}
+.form-control:focus{border-color:var(--accent)!important;box-shadow:0 0 0 3px rgba(124,58,237,.15)!important;outline:none!important}
+.form-control::placeholder{color:var(--text3)!important}
+.form-label{color:var(--text2);font-size:.82rem;font-weight:500;margin-bottom:.35rem}
+
+/* ── EMPTY STATES ────────────────────────────────────── */
+.empty-st{text-align:center;padding:3rem 1rem;color:var(--text2)}
+.empty-st i{font-size:2.8rem;display:block;margin-bottom:.85rem;opacity:.4}
+.empty-st p{font-size:.88rem;margin-bottom:1rem}
+
+/* ── ALERTS ──────────────────────────────────────────── */
+.sf-alert{padding:.7rem 1rem;border-radius:8px;font-size:.83rem;display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+.sf-alert-success{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:#34d399}
+.sf-alert-error{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171}
+.sf-alert-info{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);color:var(--accent-lt)}
+
+/* ── MISC ────────────────────────────────────────────── */
+.sf-divider{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
+.sec-pad{padding:3.5rem 0}
+.text-acc{color:var(--accent-lt)}.text-gold{color:var(--gold)}.text-dim{color:var(--text2)}
+.bg-surface{background:var(--surface)}
+.info-msg{background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.18);border-radius:8px;padding:.6rem .9rem;font-size:.76rem;color:var(--text2);display:flex;gap:.5rem}
+.info-msg i{color:var(--accent);flex-shrink:0}
+.section-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:1.25rem 1.4rem}
+.kpi-val{font-family:'Rajdhani',sans-serif;font-size:1.9rem;font-weight:700}
+.kpi-lbl{font-size:.72rem;text-transform:uppercase;letter-spacing:.7px;color:var(--text2);margin-bottom:.25rem}
+
+/* Participant grid */
+.part-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem;text-align:center;transition:all .2s}
+.part-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.part-card.classified{border-color:rgba(16,185,129,.3)}
+.part-logo{width:64px;height:64px;border-radius:10px;object-fit:cover;margin:0 auto .65rem;display:block;border:1px solid var(--border)}
+.part-logo-ph{width:64px;height:64px;border-radius:10px;background:var(--surface2);margin:0 auto .65rem;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:1.4rem;border:1px solid var(--border)}
+.part-name{font-size:.77rem;font-weight:600;color:var(--text);line-height:1.3}
+.part-classified{font-size:.63rem;color:var(--green);margin-top:.2rem}
+
+/* Final table */
+.final-box{background:linear-gradient(135deg,rgba(245,158,11,.05),rgba(124,58,237,.04));border:1px solid rgba(245,158,11,.2);border-radius:var(--r2);padding:1.4rem}
+
+/* Offcanvas override */
+.sf-offcanvas{background:var(--surface);border-right:1px solid var(--border)}
+
+/* Footer */
+.sf-footer{background:var(--surface);border-top:1px solid var(--border);padding:1.75rem 0;margin-top:4rem}
+.sf-footer-brand{font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;color:var(--accent-lt)}
+
+/* Responsive */
+@media(max-width:992px){
+  .ticket-drawer{width:100%}
+  .podio-wrap{flex-wrap:wrap}
+}
+@media(max-width:576px){
+  .hero-title{font-size:2rem}
+  .sec-pad{padding:2.5rem 0}
+}
+
+
+
+/* ================================================================
+   StakeFolclor main.css — THEME BRIDGE v3
+   Las secciones de apuestas/predicciones/etc respetan dark/light
+   ================================================================ */
+
+/* Variables del sistema que respetan el tema */
+[data-theme="light"] {
+  --bg:        #faf7f2;
+  --bg2:       #f2ede4;
+  --surface:   #ffffff;
+  --surface2:  #f5f0e8;
+  --surface3:  #ede8dc;
+  --border:    rgba(139,94,15,.14);
+  --border2:   rgba(139,94,15,.3);
+  --accent:    #8b5e0f;
+  --accent2:   #6d4a0c;
+  --accent-lt: #8b5e0f;
+  --gold:      #8b5e0f;
+  --silver:    #6b5a3e;
+  --green:     #1a7a4a;
+  --red:       #b91c1c;
+  --text:      #2c1f0e;
+  --text2:     #6b4f2a;
+  --text3:     #9c8060;
+}
+
+[data-theme="light"] body {
+  background: #faf7f2;
+  color: #2c1f0e;
+}
+
+[data-theme="light"] .sf-table thead tr {
+  background: linear-gradient(90deg, rgba(139,94,15,.12), rgba(139,94,15,.04));
+}
+[data-theme="light"] .sf-table thead th {
+  color: #8b5e0f;
+}
+[data-theme="light"] .sf-table-wrap {
+  background: #ffffff;
+  border-color: rgba(139,94,15,.14);
+}
+[data-theme="light"] .sf-table tbody tr:hover {
+  background: rgba(139,94,15,.03);
+}
+[data-theme="light"] .sf-table tbody td { color: #2c1f0e; }
+
+[data-theme="light"] .card-sf,
+[data-theme="light"] .contest-card,
+[data-theme="light"] .poll-card,
+[data-theme="light"] .section-kpi,
+[data-theme="light"] .bet-opt,
+[data-theme="light"] .ticket-card {
+  background: #ffffff !important;
+  border-color: rgba(139,94,15,.14) !important;
+}
+
+[data-theme="light"] .bet-opt:hover {
+  background: rgba(139,94,15,.03) !important;
+  border-color: rgba(139,94,15,.28) !important;
+}
+
+[data-theme="light"] .contest-card-title,
+[data-theme="light"] .blk-title,
+[data-theme="light"] .sec-title,
+[data-theme="light"] .kpi-val,
+[data-theme="light"] .bet-name,
+[data-theme="light"] .ticket-name,
+[data-theme="light"] .drawer-title,
+[data-theme="light"] .poll-card .poll-header .sf-badge {
+  color: #2c1f0e !important;
+}
+
+[data-theme="light"] .contest-card-meta,
+[data-theme="light"] .bet-sub,
+[data-theme="light"] .ticket-meta,
+[data-theme="light"] .text-dim,
+[data-theme="light"] .kpi-lbl {
+  color: #6b4f2a !important;
+}
+
+[data-theme="light"] .blk-hdr {
+  background: linear-gradient(90deg, rgba(139,94,15,.08), transparent);
+  border-left-color: #8b5e0f;
+}
+
+[data-theme="light"] .part-card { background: #fff !important; border-color: rgba(139,94,15,.14) !important; }
+[data-theme="light"] .part-name { color: #2c1f0e !important; }
+[data-theme="light"] .cc-img-ph,
+[data-theme="light"] .grp-logo-ph,
+[data-theme="light"] .bet-logo-ph { background: #f2ede4 !important; }
+
+[data-theme="light"] .final-box {
+  background: linear-gradient(135deg, rgba(201,148,58,.06), rgba(139,94,15,.03));
+  border-color: rgba(201,148,58,.25);
+}
+
+[data-theme="light"] .sf-nav .nav-wallet,
+[data-theme="light"] .sf-nav a.nav-wallet { color: #8b5e0f !important; }
+
+[data-theme="light"] .btn-sf { background: #8b5e0f !important; color: #fff !important; }
+[data-theme="light"] .btn-sf:hover { background: #6d4a0c !important; }
+
+[data-theme="light"] .sf-table tbody .score-null { color: #9c8060 !important; }
+[data-theme="light"] .rank-num { color: #9c8060 !important; }
+[data-theme="light"] .rank-1 { color: #b8860b !important; }
+[data-theme="light"] .rank-2 { color: #6b7280 !important; }
+[data-theme="light"] .rank-3 { color: #92400e !important; }
+
+[data-theme="light"] .info-msg {
+  background: rgba(139,94,15,.06);
+  border-color: rgba(139,94,15,.18);
+  color: #6b4f2a;
+}
+[data-theme="light"] .info-msg i { color: #8b5e0f; }
+
+[data-theme="light"] .drawer-body,
+[data-theme="light"] .drawer-header,
+[data-theme="light"] .drawer-tabs,
+[data-theme="light"] #ticket-drawer {
+  background: #ffffff !important;
+  border-color: rgba(139,94,15,.14) !important;
+}
+[data-theme="light"] .drawer-tab { color: #6b4f2a; }
+[data-theme="light"] .drawer-tab.active { color: #8b5e0f; border-bottom-color: #8b5e0f; }
+[data-theme="light"] #drawer-close { color: #6b4f2a; }
+
+[data-theme="light"] .sf-hero {
+  background: linear-gradient(135deg, #1a1208 0%, #241810 60%, #1a1208 100%);
+}
+
+[data-theme="light"] .nav-link-sf {
+  color: rgba(44,31,14,.65) !important;
+}
+[data-theme="light"] .nav-link-sf:hover,
+[data-theme="light"] .nav-link-sf.active {
+  color: #8b5e0f !important;
+  background: rgba(139,94,15,.08) !important;
+}
+[data-theme="light"] .nav-wallet {
+  color: #8b5e0f !important;
+}
+[data-theme="light"] .sf-footer {
+  background: #1c1510;
+}
+
+[data-theme="light"] .btn-quick {
+  background: rgba(139,94,15,.1);
+  border-color: rgba(139,94,15,.2);
+  color: #8b5e0f;
+}
+[data-theme="light"] .btn-sf-out {
+  border-color: rgba(139,94,15,.35) !important;
+  color: #8b5e0f !important;
+}
+[data-theme="light"] .btn-sf-out:hover {
+  background: rgba(139,94,15,.08) !important;
+}
+
+[data-theme="light"] .poll-val { color: #2c1f0e !important; }
+[data-theme="light"] .poll-lbl { color: #6b4f2a !important; }
+
+[data-theme="light"] .podio-platform {
+  border-color: rgba(139,94,15,.25) !important;
+}
+[data-theme="light"] .podio-name { color: #2c1f0e !important; }
+[data-theme="light"] .podio-pts  { color: #6b4f2a !important; }
+
+[data-theme="light"] .sf-offcanvas,
+[data-theme="light"] .offcanvas {
+  background: #ffffff !important;
+  border-right-color: rgba(139,94,15,.14) !important;
+}
+
+[data-theme="light"] .score-total { color: #8b5e0f !important; }
+[data-theme="light"] .score-val   { color: #2c1f0e !important; }
+[data-theme="light"] .contest-card-ph { background: #f2ede4 !important; color: rgba(139,94,15,.35) !important; }
+
+[data-theme="light"] .acc-bar-bg { background: rgba(44,31,14,.08); }

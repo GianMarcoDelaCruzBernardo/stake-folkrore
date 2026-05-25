@@ -1,0 +1,89 @@
+﻿{% extends 'base.html' %}
+{% block title %}Prediccion - {{ contest.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.pred-section { background:var(--sf-surface); border:1px solid var(--sf-border); border-radius:14px; padding:1.5rem; margin-bottom:1.5rem; }
+.pred-section-title { font-family:'Rajdhani',sans-serif; font-weight:700; font-size:1.15rem; color:var(--sf-text); margin-bottom:1rem; display:flex; align-items:center; gap:.6rem; }
+.pred-qualifier-label { font-size:.78rem; text-transform:uppercase; letter-spacing:.7px; color:var(--sf-text-muted); margin-bottom:.3rem; }
+select.form-control option { background: #1a1a2e; }
+.podium-inputs { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+@media(max-width:640px){ .podium-inputs { grid-template-columns:1fr; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container section-pad">
+  <div class="mb-5">
+    <h1 class="sf-section-title">Tu Prediccion</h1>
+    <p style="color:var(--sf-text-muted);">{{ contest.name }} &mdash; {{ contest.date|date:"d M Y" }}</p>
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <!-- ── Clasificados por bloque ────────────── -->
+    {% for block in blocks %}
+    <div class="pred-section">
+      <div class="pred-section-title">
+        <i class="bi bi-grid-fill text-accent"></i>
+        Clasificados &mdash; {{ block.name }}
+        <span style="font-size:.72rem;color:var(--sf-text-muted);font-weight:400;">(pasan {{ qualifiers }})</span>
+      </div>
+
+      <div class="row g-3">
+        {% for i in qualifiers_range %}
+        <div class="col-md-6">
+          <div class="pred-qualifier-label">Clasificado #{{ i }}</div>
+          <select name="block_{{ block.id }}_qual_{{ i }}" class="form-control">
+            <option value="">-- Seleccionar agrupacion --</option>
+            {% for group in block.groups.all %}
+            <option value="{{ group.name }}"
+              {% for ex_item in prediction.items.all %}
+                {% if ex_item.block_id == block.id and ex_item.position == i and ex_item.predicted_group_name == group.name %}selected{% endif %}
+              {% endfor %}
+            >{{ group.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+
+    <!-- ── Podio final ────────────────────────── -->
+    <div class="pred-section">
+      <div class="pred-section-title">
+        <i class="bi bi-trophy-fill text-gold"></i>
+        Podio Final del Concurso
+      </div>
+
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="pred-qualifier-label">Campeon</div>
+          <input type="text" name="champion" class="form-control"
+            placeholder="Nombre de la agrupacion ganadora"
+            value="{% for item in prediction.items.all %}{% if item.category == 'champion' %}{{ item.predicted_group_name }}{% endif %}{% endfor %}">
+        </div>
+        {% for i in "123"|make_list %}
+        <div class="col-md-4">
+          <div class="pred-qualifier-label">Top {{ forloop.counter }}</div>
+          <input type="text" name="top3_{{ forloop.counter }}" class="form-control"
+            placeholder="#{{ forloop.counter }}"
+            value="{% for item in prediction.items.all %}{% if item.category == 'top3' and item.position == forloop.counter %}{{ item.predicted_group_name }}{% endif %}{% endfor %}">
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="d-flex gap-3 flex-wrap">
+      <button type="submit" class="btn-sf">
+        <i class="bi bi-check-circle-fill"></i>Guardar Prediccion
+      </button>
+      <a href="{% url 'contests:detail' contest.slug %}" class="btn-sf-outline">
+        <i class="bi bi-arrow-left"></i>Volver al Concurso
+      </a>
+    </div>
+  </form>
+</div>
+{% endblock %}
