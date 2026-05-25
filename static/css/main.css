@@ -566,3 +566,23 @@ html,body{
     opacity:1 !important;
 }
 
+/* ── TABLE RESPONSIVE MOBILE ─────────────────────────── */
+@media(max-width:768px){
+  .sf-table-wrap{
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .sf-table{
+    min-width: 600px;
+  }
+  .sf-table thead th,
+  .sf-table tbody td{
+    padding: .6rem .65rem;
+    font-size: .75rem;
+  }
+  .grp-logo,
+  .grp-logo-ph{
+    width: 28px;
+    height: 28px;
+  }
+}
