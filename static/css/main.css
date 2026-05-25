@@ -554,3 +554,15 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 [data-theme="light"] .contest-card-ph { background: #f2ede4 !important; color: rgba(139,94,15,.35) !important; }
 
 [data-theme="light"] .acc-bar-bg { background: rgba(44,31,14,.08); }
+
+.hero-section{
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+html,body{
+    visibility:visible !important;
+    opacity:1 !important;
+}
+

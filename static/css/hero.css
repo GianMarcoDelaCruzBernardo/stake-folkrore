@@ -1044,3 +1044,15 @@ nav.sf-nav {
 @media (max-width: 480px) {
   .hero-stats { flex-direction: column; gap: 1rem; }
 }
+
+.hero-section{
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+html,body{
+    visibility:visible !important;
+    opacity:1 !important;
+}
+

@@ -42,7 +42,7 @@
 
       <!-- Brand con logo -->
       <a class="sf-brand" href="{% url 'core:home' %}">
-        <img src="/media/img/logohome.png"
+        <img src="{% static 'img/logohome.png' %}"
              alt="StakeFolclor"
              class="sf-brand-logo-img"
              onerror="this.style.display='none'">
@@ -126,7 +126,7 @@
      id="mobileMenu">
   <div class="offcanvas-header">
     <a class="sf-brand" href="{% url 'core:home' %}">
-      <img src="/media/img/logohome.png" alt="" class="sf-brand-logo-img"
+      <img src="{% static 'img/logohome.png' %}" alt="" class="sf-brand-logo-img"
            onerror="this.style.display='none'">
       <span class="sf-brand-text">
         <span class="sf-brand-name">StakeFolclor</span>
@@ -331,3 +331,4 @@
 {% block extra_js %}{% endblock %}
 </body>
 </html>
+

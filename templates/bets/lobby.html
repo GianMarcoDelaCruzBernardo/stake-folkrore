@@ -1,4 +1,5 @@
-﻿{% extends 'base.html' %}
+﻿{% load static %}
+{% extends 'base.html' %}
 {% block title %}Apuestas — {{ contest.name }}{% endblock %}
 {% block content %}
 
@@ -71,7 +72,7 @@
           {% for opt in bg.options %}
           <div class="bet-opt">
             {% if opt.group_logo %}
-            <img src="{{ opt.group_logo.url }}" class="bet-logo">
+            <img src="{% static 'img/logohome.png' %}" class="bet-logo">
             {% else %}
             <span class="bet-logo-ph"><i class="bi bi-music-note"></i></span>
             {% endif %}
@@ -109,7 +110,7 @@
           {% for opt in resolved_block_opts %}
           <div class="bet-opt {% if opt.won %}resolved-won{% else %}resolved-lost{% endif %}">
             {% if opt.group_logo %}
-            <img src="{{ opt.group_logo.url }}" class="bet-logo">
+            <img src="{% static 'img/logohome.png' %}" class="bet-logo">
             {% else %}
             <span class="bet-logo-ph"><i class="bi bi-music-note"></i></span>
             {% endif %}
@@ -150,7 +151,7 @@
           {% for opt in champ_open %}
           <div class="bet-opt">
             {% if opt.group_logo %}
-            <img src="{{ opt.group_logo.url }}" class="bet-logo">
+            <img src="{% static 'img/logohome.png' %}" class="bet-logo">
             {% else %}
             <span class="bet-logo-ph"><i class="bi bi-music-note"></i></span>
             {% endif %}
@@ -194,7 +195,7 @@
         {% for opt in champ_resolved %}
         <div class="bet-opt {% if opt.won %}resolved-won{% else %}resolved-lost{% endif %}">
           {% if opt.group_logo %}
-          <img src="{{ opt.group_logo.url }}" class="bet-logo">
+          <img src="{% static 'img/logohome.png' %}" class="bet-logo">
           {% else %}
           <span class="bet-logo-ph"><i class="bi bi-music-note"></i></span>
           {% endif %}
@@ -289,3 +290,4 @@
   </div>
 </div>
 {% endblock %}
+
