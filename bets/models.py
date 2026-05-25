@@ -3,6 +3,7 @@ bets/models.py
 ==============
 Modelos de apuestas. Sin logica de negocio (esta en services.py).
 """
+from cloudinary.models import CloudinaryField
 from django.db import models
 from django.conf import settings
 from decimal import Decimal
@@ -33,7 +34,7 @@ class BetOption(models.Model):
     bet_type   = models.CharField(max_length=30, choices=TYPE_CHOICES)
     block      = models.ForeignKey("contests.Block", on_delete=models.SET_NULL, null=True, blank=True)
     group_name = models.CharField(max_length=200)
-    group_logo = models.ImageField(upload_to="bet_logos/", null=True, blank=True)
+    group_logo = CloudinaryField('group_logo', null=True, blank=True)
     odds       = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal("1.53"))
     is_active  = models.BooleanField(default=False)   # admin activa manualmente
     is_resolved = models.BooleanField(default=False)
