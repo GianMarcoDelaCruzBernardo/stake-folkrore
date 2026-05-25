@@ -1,42 +1,49 @@
-ï»¿{% load static %}
 {% extends 'base.html' %}
-{% block title %}Ingresar - StakeFolclor{% endblock %}
-{% block content %}
-<div class="container section-pad">
-  <div class="row justify-content-center">
-    <div class="col-md-5 col-lg-4">
-      <div class="text-center mb-4">
-        <p class="sf-brand" style="font-size:2rem;">Stake<span style="color:var(--sf-text);">Folclor</span></p>
-        <p style="color:var(--sf-text-muted);font-size:0.875rem;">Ingresa a tu cuenta</p>
-      </div>
-      <div class="sf-auth-card">
-        <form method="post">
-          {% csrf_token %}
-          <div class="mb-3">
-            <label class="form-label"><i class="bi bi-envelope me-1"></i>Correo electronico</label>
-            {{ form.username }}
-          </div>
-          <div class="mb-4">
-            <label class="form-label"><i class="bi bi-lock me-1"></i>Contrasena</label>
-            {{ form.password }}
-          </div>
-          {% if form.errors %}
-          <div class="sf-alert sf-alert-error mb-3">
-            <i class="bi bi-x-circle"></i>Credenciales incorrectas. Verifica tus datos.
-          </div>
-          {% endif %}
-          <button type="submit" class="btn-sf w-100 justify-content-center">
-            <i class="bi bi-box-arrow-in-right"></i>Ingresar
-          </button>
-        </form>
-        <hr class="sf-divider">
-        <p class="text-center" style="color:var(--sf-text-muted);font-size:0.875rem;">
-          No tienes cuenta?
-          <a href="{% url 'accounts:register' %}" style="color:var(--sf-accent);text-decoration:none;font-weight:500;">Registrarse</a>
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
+{% load static %}
 
+{% block title %}Ingresar - StakeFolclor{% endblock %}
+
+{% block content %}
+
+<div class="container section-pad">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+
+            <div class="sf-auth-card">
+
+                <h2 class="text-center mb-4">
+                    StakeFolclor
+                </h2>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label>Usuario</label>
+                        {{ form.username }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Contraseña</label>
+                        {{ form.password }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        Ingresar
+                    </button>
+
+                </form>
+
+                <div class="text-center mt-3">
+                    <a href="{% url 'accounts:register' %}">
+                        Crear cuenta
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
