@@ -1,11 +1,10 @@
 ﻿import os
 import dj_database_url
 from pathlib import Path
-from decimal import Decimal
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-local-dev-only-change-in-prod")
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-local-dev-only")
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 
@@ -21,9 +20,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "crispy_forms",
     "cloudinary_storage",
     "cloudinary",
+    "crispy_forms",
     "crispy_bootstrap5",
     "core",
     "accounts",
@@ -61,7 +60,6 @@ TEMPLATES = [{
 
 WSGI_APPLICATION = "stakefolclor.wsgi.application"
 
-# Base de datos: usa DATABASE_URL si existe (Render), sino variables individuales
 DATABASE_URL = os.environ.get("DATABASE_URL")
 if DATABASE_URL:
     DATABASES = {
@@ -104,6 +102,16 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL  = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# Cloudinary - almacenamiento de imagenes en produccion
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY":    os.environ.get("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
+}
+
+if os.environ.get("CLOUDINARY_CLOUD_NAME"):
+    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -165,15 +173,3 @@ UNFOLD = {
         ],
     },
 }
-
-# ── Cloudinary ──────────────────────────────────────────────
-import cloudinary
-
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY':    os.environ.get('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
-}
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
