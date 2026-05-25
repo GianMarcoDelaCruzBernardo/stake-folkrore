@@ -1,12 +1,13 @@
-﻿import dj_database_url
-import os
+﻿import os
+import dj_database_url
 from pathlib import Path
 from decimal import Decimal
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = "django-insecure-stakefolclor-v2-2025-xyz789"
-DEBUG = True
-ALLOWED_HOSTS = ["*"]
+
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-local-dev-only-change-in-prod")
+DEBUG = os.environ.get("DEBUG", "True") == "True"
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 
 INSTALLED_APPS = [
     "unfold",
@@ -58,10 +59,27 @@ TEMPLATES = [{
 
 WSGI_APPLICATION = "stakefolclor.wsgi.application"
 
-DATABASES = {"default": {
-    "ENGINE": "django.db.backends.sqlite3",
-    "NAME": BASE_DIR / "db.sqlite3",
-}}
+# Base de datos: usa DATABASE_URL si existe (Render), sino variables individuales
+DATABASE_URL = os.environ.get("DATABASE_URL")
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=True,
+        )
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get("DB_NAME", "stakefolclor"),
+            "USER": os.environ.get("DB_USER", "postgres"),
+            "PASSWORD": os.environ.get("DB_PASSWORD", ""),
+            "HOST": os.environ.get("DB_HOST", "localhost"),
+            "PORT": os.environ.get("DB_PORT", "5432"),
+        }
+    }
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
@@ -121,20 +139,20 @@ UNFOLD = {
                 {"title":"Dashboard","icon":"dashboard","link":"/system-control-panel-89721/"},
             ]},
             {"title":"Concursos","separator":True,"items":[
-                {"title":"Concursos",  "icon":"emoji_events","link":"/system-control-panel-89721/contests/contest/"},
-                {"title":"Bloques",    "icon":"grid_view",   "link":"/system-control-panel-89721/contests/block/"},
-                {"title":"Agrupaciones","icon":"groups",     "link":"/system-control-panel-89721/contests/group/"},
-                {"title":"Jurados",    "icon":"gavel",       "link":"/system-control-panel-89721/contests/judge/"},
-                {"title":"Puntajes",   "icon":"scoreboard",  "link":"/system-control-panel-89721/contests/score/"},
+                {"title":"Concursos",   "icon":"emoji_events", "link":"/system-control-panel-89721/contests/contest/"},
+                {"title":"Bloques",     "icon":"grid_view",    "link":"/system-control-panel-89721/contests/block/"},
+                {"title":"Agrupaciones","icon":"groups",       "link":"/system-control-panel-89721/contests/group/"},
+                {"title":"Jurados",     "icon":"gavel",        "link":"/system-control-panel-89721/contests/judge/"},
+                {"title":"Puntajes",    "icon":"scoreboard",   "link":"/system-control-panel-89721/contests/score/"},
             ]},
             {"title":"Final","separator":True,"items":[
-                {"title":"Tabla Final","icon":"military_tech",    "link":"/system-control-panel-89721/contests/finalgroup/"},
-                {"title":"Podio",      "icon":"workspace_premium","link":"/system-control-panel-89721/contests/finalresult/"},
+                {"title":"Tabla Final","icon":"military_tech",     "link":"/system-control-panel-89721/contests/finalgroup/"},
+                {"title":"Podio",      "icon":"workspace_premium", "link":"/system-control-panel-89721/contests/finalresult/"},
             ]},
             {"title":"Apuestas","separator":True,"items":[
-                {"title":"Opciones","icon":"bolt",               "link":"/system-control-panel-89721/bets/betoption/"},
-                {"title":"Tickets", "icon":"confirmation_number","link":"/system-control-panel-89721/bets/bet/"},
-                {"title":"Billeteras","icon":"wallet",           "link":"/system-control-panel-89721/bets/wallet/"},
+                {"title":"Opciones",   "icon":"bolt",                "link":"/system-control-panel-89721/bets/betoption/"},
+                {"title":"Tickets",    "icon":"confirmation_number", "link":"/system-control-panel-89721/bets/bet/"},
+                {"title":"Billeteras", "icon":"wallet",              "link":"/system-control-panel-89721/bets/wallet/"},
             ]},
             {"title":"Predicciones","separator":True,"items":[
                 {"title":"Predicciones","icon":"psychology","link":"/system-control-panel-89721/predictions/prediction/"},
@@ -145,11 +163,3 @@ UNFOLD = {
         ],
     },
 }
-
-DATABASES = {
-    "default": dj_database_url.config(
-        default="sqlite:///db.sqlite3",
-        conn_max_age=600
-    )
-}
-
