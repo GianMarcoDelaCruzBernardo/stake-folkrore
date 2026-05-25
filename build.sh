@@ -8,3 +8,5 @@ python manage.py collectstatic --noinput
 python manage.py migrate
 
 python manage.py create_admin
+
+# redeploy-2026-05-25_10-17
