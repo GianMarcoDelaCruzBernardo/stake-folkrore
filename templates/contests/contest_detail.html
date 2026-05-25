@@ -36,13 +36,10 @@
 
 <div class="container sec-pad">
   <div class="row g-4">
-    <!-- Contenido principal -->
     <div class="col-lg-9">
 
-      <!-- Ad inline -->
       <div class="ad-slot ad-slot-inline mb-4">Publicidad</div>
 
-      <!-- Bloques -->
       {% if blocks_data %}
       <div class="mb-2"><h2 class="sec-title">Bloques de Clasificacion</h2></div>
       {% for bd in blocks_data %}
@@ -60,7 +57,7 @@
               <tr {% if item.group.qualified %}class="qualified-row"{% endif %}>
                 <td><span class="rank-num {% if forloop.counter == 1 %}rank-1{% elif forloop.counter == 2 %}rank-2{% elif forloop.counter == 3 %}rank-3{% endif %}">{{ forloop.counter }}</span></td>
                 <td><strong>{{ item.group.name }}</strong>{% if item.group.qualified %}<span style="font-size:.62rem;background:rgba(16,185,129,.12);color:var(--green);border:1px solid rgba(16,185,129,.25);padding:.1rem .38rem;border-radius:4px;margin-left:.4rem;vertical-align:middle">Clasif.</span>{% endif %}</td>
-                <td>{% if item.group.logo %}<img src="{% static 'img/logohome.png' %}" class="grp-logo">{% else %}<span class="grp-logo-ph"><i class="bi bi-music-note"></i></span>{% endif %}</td>
+                <td>{% if item.group.logo %}<img src="{{ item.group.logo.url }}" class="grp-logo">{% else %}<span class="grp-logo-ph"><i class="bi bi-music-note"></i></span>{% endif %}</td>
                 {% for s in item.scores %}<td class="score-val">{% if s is not None %}{{ s }}{% else %}<span class="score-null">—</span>{% endif %}</td>{% endfor %}
                 <td class="score-total">{{ item.total }}</td>
                 <td style="text-align:center">{% if item.group.qualified %}<i class="bi bi-check-circle-fill" style="color:var(--green);font-size:1rem"></i>{% else %}<i class="bi bi-dash-circle" style="color:var(--text3)"></i>{% endif %}</td>
@@ -73,7 +70,6 @@
       {% endfor %}
       {% endif %}
 
-      <!-- Tabla Final -->
       {% if has_final %}
       <div class="mb-2 mt-4"><h2 class="sec-title">Tabla Final</h2></div>
       <div class="final-box mb-4">
@@ -96,7 +92,7 @@
               <tr>
                 <td><span class="rank-num {% if forloop.counter == 1 %}rank-1{% elif forloop.counter == 2 %}rank-2{% elif forloop.counter == 3 %}rank-3{% endif %}">{{ forloop.counter }}</span></td>
                 <td><strong>{{ item.fg.name }}</strong></td>
-                <td>{% if item.fg.logo %}<img src="{% static 'img/logohome.png' %}" class="grp-logo">{% else %}<span class="grp-logo-ph"><i class="bi bi-music-note"></i></span>{% endif %}</td>
+                <td>{% if item.fg.logo %}<img src="{{ item.fg.logo.url }}" class="grp-logo">{% else %}<span class="grp-logo-ph"><i class="bi bi-music-note"></i></span>{% endif %}</td>
                 <td style="text-align:center;color:var(--text2)">{{ item.fg.final_order }}</td>
                 {% for s in item.scores %}<td class="score-val">{% if s is not None %}{{ s }}{% else %}<span class="score-null">—</span>{% endif %}</td>{% endfor %}
                 <td class="score-total">{% if item.total %}{{ item.total }}{% else %}<span class="score-null">—</span>{% endif %}</td>
@@ -108,14 +104,13 @@
       </div>
       {% endif %}
 
-      <!-- Podio -->
       {% if podium %}
       <div class="mb-2 mt-4"><h2 class="sec-title">Podio Final</h2></div>
       <div class="card-sf card-body-sf mb-4">
         <div class="podio-wrap">
           {% for r in podium %}
           <div class="podio-item podio-{{ r.position }}">
-            {% if r.group_logo %}<img src="{% static 'img/logohome.png' %}" class="podio-logo">
+            {% if r.group_logo %}<img src="{{ r.group_logo.url }}" class="podio-logo">
             {% else %}<div class="podio-logo-ph" style="{% if r.position == 1 %}width:80px;height:80px;border-color:var(--gold){% elif r.position == 2 %}width:65px;height:65px;border-color:var(--silver){% else %}width:60px;height:60px;border-color:#cd7f32{% endif %};background:var(--surface2)"><i class="bi bi-music-note" style="font-size:1.3rem;color:var(--text3)"></i></div>{% endif %}
             <div class="podio-platform"><div class="podio-pos">#{{ r.position }}</div></div>
             <div class="podio-name">{{ r.group_name }}</div>
@@ -126,14 +121,13 @@
       </div>
       {% endif %}
 
-      <!-- Participantes -->
       {% if all_groups %}
       <div class="mb-3 mt-2"><h2 class="sec-title">Todas las Agrupaciones</h2></div>
       <div class="row g-2">
         {% for g in all_groups %}
         <div class="col-6 col-sm-4 col-md-3 col-lg-2">
           <div class="part-card {% if g.qualified %}classified{% endif %}">
-            {% if g.logo %}<img src="{% static 'img/logohome.png' %}" class="part-logo">{% else %}<div class="part-logo-ph"><i class="bi bi-music-note"></i></div>{% endif %}
+            {% if g.logo %}<img src="{{ g.logo.url }}" class="part-logo">{% else %}<div class="part-logo-ph"><i class="bi bi-music-note"></i></div>{% endif %}
             <div class="part-name">{{ g.name }}</div>
             {% if g.qualified %}<div class="part-classified"><i class="bi bi-check-circle-fill me-1"></i>Clasificado</div>{% endif %}
           </div>
@@ -142,16 +136,13 @@
       </div>
       {% endif %}
 
-    </div><!-- /main col -->
+    </div>
 
-    <!-- Sidebar -->
     <div class="col-lg-3">
       <div style="position:sticky;top:80px;display:flex;flex-direction:column;gap:1rem;">
 
-        <!-- Sidebar Ad -->
         <div class="ad-slot ad-slot-sidebar">Publicidad</div>
 
-        <!-- Quick stats -->
         <div class="card-sf card-body-sf">
           <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:.75rem">Info del Concurso</div>
           <div style="display:flex;flex-direction:column;gap:.6rem;font-size:.82rem">
@@ -169,7 +160,6 @@
           </div>
         </div>
 
-        <!-- Second sidebar Ad -->
         <div class="ad-slot ad-slot-sidebar">Publicidad</div>
 
       </div>
@@ -178,4 +168,3 @@
   </div>
 </div>
 {% endblock %}
-

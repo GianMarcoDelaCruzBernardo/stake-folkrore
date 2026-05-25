@@ -61,7 +61,7 @@ class Block(models.Model):
 class Group(models.Model):
     block     = models.ForeignKey(Block, on_delete=models.CASCADE, related_name="groups")
     name      = models.CharField(max_length=200, verbose_name="Nombre agrupacion")
-    logo      = models.ImageField(upload_to="logos/", null=True, blank=True)
+    logo = CloudinaryField('logo', null=True, blank=True)
     order     = models.PositiveIntegerField(default=1, verbose_name="Orden")
     qualified = models.BooleanField(default=False, verbose_name="Clasificado")
 
@@ -114,7 +114,7 @@ class FinalGroup(models.Model):
     contest      = models.ForeignKey(Contest, on_delete=models.CASCADE, related_name="final_groups")
     source_group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name="final_entries")
     name         = models.CharField(max_length=200)
-    logo         = models.ImageField(upload_to="final_logos/", null=True, blank=True)
+    logo = CloudinaryField('logo', null=True, blank=True)
     final_order  = models.PositiveIntegerField(default=1, verbose_name="Orden en final (sorteo)")
 
     class Meta:
@@ -152,7 +152,7 @@ class FinalScore(models.Model):
 class FinalResult(models.Model):
     contest     = models.ForeignKey(Contest, on_delete=models.CASCADE, related_name="final_results")
     group_name  = models.CharField(max_length=200)
-    group_logo  = models.ImageField(upload_to="final_logos/", null=True, blank=True)
+    group_logo = CloudinaryField('group_logo', null=True, blank=True)
     position    = models.PositiveIntegerField()
     total_score = models.PositiveIntegerField(default=0)
 
