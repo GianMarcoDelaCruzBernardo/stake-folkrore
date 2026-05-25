@@ -19,8 +19,8 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "cloudinary_storage",  
     "django.contrib.staticfiles",
+    "cloudinary_storage",
     "cloudinary",
     "crispy_forms",
     "crispy_bootstrap5",
@@ -105,9 +105,9 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 # Cloudinary - almacenamiento de imagenes en produccion
 CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
-    "API_KEY":    os.environ.get("CLOUDINARY_API_KEY"),
-    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
+    "CLOUD_NAME": os.environ.get("dnct75yjs"),
+    "API_KEY":    os.environ.get("297948778844364"),
+    "API_SECRET": os.environ.get("5vCBvvJ4vKmXT3aMtCbbnU5o3Ug"),
 }
 
 if os.environ.get("CLOUDINARY_CLOUD_NAME"):
