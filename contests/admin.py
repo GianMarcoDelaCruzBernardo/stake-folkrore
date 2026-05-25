@@ -1,8 +1,20 @@
-﻿from django.contrib import admin
+﻿from django import forms
+from cloudinary.models import CloudinaryField
+from cloudinary.forms import CloudinaryFileField
+from django.contrib import admin
 from django.contrib import messages
 from unfold.admin import ModelAdmin, TabularInline
 from .models import Contest, Block, Group, Judge, Score, FinalGroup, FinalScore, FinalResult
 
+class ContestAdminForm(forms.ModelForm):
+    class Meta:
+        model = Contest
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.flyer:
+            self.fields['flyer'].help_text = f'<img src="{self.instance.flyer.url}" style="max-height:150px;margin-top:8px;border-radius:6px;">'
 
 class BlockInline(TabularInline):
     model = Block
@@ -48,6 +60,7 @@ class FinalScoreInline(TabularInline):
 
 @admin.register(Contest)
 class ContestAdmin(ModelAdmin):
+    form = ContestAdminForm
     list_display  = ("name", "date", "location", "status", "judges_count", "final_judges_count", "qualifiers_per_block", "is_active")
     list_filter   = ("status", "is_active")
     list_editable = ("status", "is_active")
