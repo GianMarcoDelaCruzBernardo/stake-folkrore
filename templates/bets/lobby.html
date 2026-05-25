@@ -37,10 +37,8 @@
 <div class="container sec-pad">
   <div class="row g-4">
 
-    <!-- Contenido principal -->
     <div class="col-lg-8">
 
-      <!-- Tabs -->
       <div class="d-flex gap-2 mb-3 flex-wrap">
         <button class="btn-sf bet-tab active" data-tab="tab-bloques">
           <i class="bi bi-grid me-1"></i>Clasificados de Bloque
@@ -72,7 +70,7 @@
           {% for opt in bg.options %}
           <div class="bet-opt">
             {% if opt.group_logo %}
-            <img src="{% static 'img/logohome.png' %}" class="bet-logo">
+            <img src="{{ opt.group_logo.url }}" class="bet-logo">
             {% else %}
             <span class="bet-logo-ph"><i class="bi bi-music-note"></i></span>
             {% endif %}
@@ -110,7 +108,7 @@
           {% for opt in resolved_block_opts %}
           <div class="bet-opt {% if opt.won %}resolved-won{% else %}resolved-lost{% endif %}">
             {% if opt.group_logo %}
-            <img src="{% static 'img/logohome.png' %}" class="bet-logo">
+            <img src="{{ opt.group_logo.url }}" class="bet-logo">
             {% else %}
             <span class="bet-logo-ph"><i class="bi bi-music-note"></i></span>
             {% endif %}
@@ -151,7 +149,7 @@
           {% for opt in champ_open %}
           <div class="bet-opt">
             {% if opt.group_logo %}
-            <img src="{% static 'img/logohome.png' %}" class="bet-logo">
+            <img src="{{ opt.group_logo.url }}" class="bet-logo">
             {% else %}
             <span class="bet-logo-ph"><i class="bi bi-music-note"></i></span>
             {% endif %}
@@ -195,7 +193,7 @@
         {% for opt in champ_resolved %}
         <div class="bet-opt {% if opt.won %}resolved-won{% else %}resolved-lost{% endif %}">
           {% if opt.group_logo %}
-          <img src="{% static 'img/logohome.png' %}" class="bet-logo">
+          <img src="{{ opt.group_logo.url }}" class="bet-logo">
           {% else %}
           <span class="bet-logo-ph"><i class="bi bi-music-note"></i></span>
           {% endif %}
@@ -218,7 +216,6 @@
 
     </div>
 
-    <!-- Sidebar: solo tickets de este concurso, SIN botón "Mis Tickets" extra -->
     <div class="col-lg-4">
       <div style="position:sticky;top:82px">
         <div class="card-sf">
@@ -290,5 +287,3 @@
   </div>
 </div>
 {% endblock %}
-
-
