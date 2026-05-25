@@ -3,6 +3,7 @@ contests/models.py
 ==================
 Modelos de concursos y scoring. Logica en services.py.
 """
+from cloudinary.models import CloudinaryField
 from django.db import models
 
 
@@ -16,7 +17,7 @@ class Contest(models.Model):
     name                  = models.CharField(max_length=200, verbose_name="Nombre")
     slug                  = models.SlugField(unique=True)
     description           = models.TextField(blank=True)
-    flyer                 = models.ImageField(upload_to="flyers/", null=True, blank=True)
+    flyer                 = CloudinaryField('flyer', null=True, blank=True)
     location              = models.CharField(max_length=200)
     date                  = models.DateField()
     status                = models.CharField(max_length=20, choices=STATUS, default="upcoming")
@@ -162,3 +163,4 @@ class FinalResult(models.Model):
 
     def __str__(self):
         return f"#{self.position} {self.group_name} — {self.contest.name}"
+

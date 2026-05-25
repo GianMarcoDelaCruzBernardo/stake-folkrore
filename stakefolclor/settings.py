@@ -1,6 +1,8 @@
 import os
 import dj_database_url
 from pathlib import Path
+import cloudinary
+import cloudinary.uploader
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -104,6 +106,7 @@ MEDIA_URL  = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # Cloudinary - almacenamiento de imagenes en produccion
+# Una sola vez, sin duplicado
 CLOUDINARY_STORAGE = {
     "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
     "API_KEY":    os.environ.get("CLOUDINARY_API_KEY"),
@@ -111,6 +114,11 @@ CLOUDINARY_STORAGE = {
 }
 
 if os.environ.get("CLOUDINARY_CLOUD_NAME"):
+    cloudinary.config(
+        cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
+        api_key=os.environ.get("CLOUDINARY_API_KEY"),
+        api_secret=os.environ.get("CLOUDINARY_API_SECRET"),
+    )
     DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -175,7 +183,7 @@ UNFOLD = {
 }
 
 # DEBUG temporal - borrar despues
-import cloudinary
+
 print("=== CLOUDINARY CONFIG ===")
 print("CLOUD_NAME:", os.environ.get("CLOUDINARY_CLOUD_NAME"))
 print("DEFAULT_FILE_STORAGE:", DEFAULT_FILE_STORAGE if 'DEFAULT_FILE_STORAGE' in dir() else "NO SETEADO")
