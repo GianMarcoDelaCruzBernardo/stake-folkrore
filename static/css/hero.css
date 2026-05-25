@@ -1,11 +1,11 @@
-﻿/* ============================================================
-   StakeFolclor — Hero CSS v3
-   Diseño cultural premium con dark/light mode correcto
+/* ============================================================
+   StakeFolclor � Hero CSS v3
+   Dise�o cultural premium con dark/light mode correcto
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600;700&display=swap');
 
-/* ── Variables DARK (default) ─────────────────────────── */
+/* -- Variables DARK (default) --------------------------- */
 :root,
 [data-theme="dark"] {
   --gold:          #c9943a;
@@ -36,7 +36,7 @@
   --footer-border: rgba(201,148,58,.12);
 }
 
-/* ── Variables LIGHT ──────────────────────────────────── */
+/* -- Variables LIGHT ------------------------------------ */
 [data-theme="light"] {
   --gold:          #8b5e0f;
   --gold-soft:     #a0711a;
@@ -65,7 +65,7 @@
   --footer-border: rgba(201,148,58,.15);
 }
 
-/* ── Reset mínimo ─────────────────────────────────────── */
+/* -- Reset m�nimo --------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
 
 body {
@@ -74,7 +74,7 @@ body {
   transition: background .35s ease, color .35s ease;
 }
 
-/* ── NAVBAR ───────────────────────────────────────────── */
+/* -- NAVBAR --------------------------------------------- */
 .sf-nav,
 nav.sf-nav {
   height: var(--nav-h);
@@ -166,7 +166,7 @@ nav.sf-nav {
   right: .85rem;
 }
 
-/* Wallet pill — SIN link (solo display) */
+/* Wallet pill � SIN link (solo display) */
 .nav-wallet-display {
   font-family: 'Poppins', sans-serif;
   font-size: .82rem;
@@ -183,7 +183,7 @@ nav.sf-nav {
   user-select: none;
 }
 
-/* Botón Tickets */
+/* Bot�n Tickets */
 .btn-tickets {
   font-family: 'Poppins', sans-serif;
   font-size: .82rem;
@@ -281,7 +281,7 @@ nav.sf-nav {
 }
 .btn-sm-sf { padding: .34rem .8rem !important; font-size: .78rem !important; }
 
-/* ── HERO SECTION ──────────────────────────────────────── */
+/* -- HERO SECTION ---------------------------------------- */
 .cf-hero-wrap {
   position: relative;
   min-height: calc(100vh - var(--nav-h));
@@ -294,7 +294,7 @@ nav.sf-nav {
 .cf-hero-bg-img {
   position: absolute;
   inset: 0;
-  background-image: url('/media/img/webhome.png');
+  background-image: url('/static/img/webhome.png');
   background-size: cover;
   background-position: center 20%;
   background-repeat: no-repeat;
@@ -355,7 +355,7 @@ nav.sf-nav {
   border-radius: 1px;
 }
 
-/* Título */
+/* T�tulo */
 .hero-main-title {
   font-family: 'Playfair Display', serif;
   font-size: clamp(2.6rem, 5.5vw, 4.4rem);
@@ -372,7 +372,7 @@ nav.sf-nav {
   font-style: italic;
 }
 
-/* Subtítulo */
+/* Subt�tulo */
 .hero-subtitle {
   font-family: 'Poppins', sans-serif;
   font-size: .92rem;
@@ -498,8 +498,8 @@ nav.sf-nav {
 }
 .hero-scroll i { font-size: 1rem; }
 
-/* ── CONCURSOS CARDS (home) ────────────────────────────── */
-/* Sección envoltorio */
+/* -- CONCURSOS CARDS (home) ------------------------------ */
+/* Secci�n envoltorio */
 .home-section-pad { padding: 4.5rem 0; }
 
 .home-section-header {
@@ -550,7 +550,7 @@ nav.sf-nav {
 }
 .home-see-all:hover { gap: .6rem; color: var(--gold-soft); }
 
-/* Cards de concurso — carrusel horizontal como referencial */
+/* Cards de concurso � carrusel horizontal como referencial */
 .contest-cards-row {
   display: flex;
   gap: 1.1rem;
@@ -682,7 +682,7 @@ nav.sf-nav {
   border-color: var(--btn-primary-bg);
 }
 
-/* ── FEATURES STRIP ───────────────────────────────────── */
+/* -- FEATURES STRIP ------------------------------------- */
 .features-strip {
   padding: 3.5rem 0;
   border-top: 1px solid var(--card-border);
@@ -721,7 +721,7 @@ nav.sf-nav {
   line-height: 1.65;
 }
 
-/* ── TICKET DRAWER ─────────────────────────────────────── */
+/* -- TICKET DRAWER --------------------------------------- */
 #ticket-drawer {
   position: fixed;
   right: -400px;
@@ -869,7 +869,7 @@ nav.sf-nav {
   border: 2px solid var(--bg-page);
 }
 
-/* ── PREDICCIONES (mejorado) ───────────────────────────── */
+/* -- PREDICCIONES (mejorado) ----------------------------- */
 .pred-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -969,7 +969,7 @@ nav.sf-nav {
   background: currentColor; color: var(--bg-hero); flex-shrink: 0;
 }
 
-/* ── FOOTER ───────────────────────────────────────────── */
+/* -- FOOTER --------------------------------------------- */
 .sf-footer {
   background: var(--footer-bg);
   border-top: 1px solid var(--footer-border);
@@ -987,13 +987,13 @@ nav.sf-nav {
   color: rgba(201,148,58,.45);
 }
 
-/* ── OFFCANVAS MOBILE ─────────────────────────────────── */
+/* -- OFFCANVAS MOBILE ----------------------------------- */
 .sf-offcanvas {
   background: var(--bg-surface) !important;
   border-right: 1px solid var(--card-border) !important;
 }
 
-/* ── ALERTS ───────────────────────────────────────────── */
+/* -- ALERTS --------------------------------------------- */
 .sf-alert {
   padding: .7rem 1rem;
   border-radius: 9px;
@@ -1006,7 +1006,7 @@ nav.sf-nav {
 .sf-alert-error   { background: rgba(239,68,68,.1);  border: 1px solid rgba(239,68,68,.3);  color: #f87171; }
 .sf-alert-info    { background: var(--gold-dim);      border: 1px solid rgba(201,148,58,.25); color: var(--gold); }
 
-/* ── ANIMACIONES ──────────────────────────────────────── */
+/* -- ANIMACIONES ---------------------------------------- */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -1020,7 +1020,7 @@ nav.sf-nav {
   50%     { opacity: .45; }
 }
 
-/* ── RESPONSIVE ───────────────────────────────────────── */
+/* -- RESPONSIVE ----------------------------------------- */
 @media (max-width: 768px) {
   .cf-hero-wrap { min-height: 82vh; }
   .cf-hero-content { padding: 3.5rem 0 6rem; }
