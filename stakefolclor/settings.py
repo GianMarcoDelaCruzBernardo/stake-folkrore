@@ -174,3 +174,8 @@ UNFOLD = {
     },
 }
 
+# DEBUG temporal - borrar despues
+import cloudinary
+print("=== CLOUDINARY CONFIG ===")
+print("CLOUD_NAME:", os.environ.get("CLOUDINARY_CLOUD_NAME"))
+print("DEFAULT_FILE_STORAGE:", DEFAULT_FILE_STORAGE if 'DEFAULT_FILE_STORAGE' in dir() else "NO SETEADO")
