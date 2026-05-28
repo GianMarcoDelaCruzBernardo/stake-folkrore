@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "predictions",
     "dashboard",
     "bets",
+    "store",
 ]
 
 MIDDLEWARE = [
@@ -148,7 +149,7 @@ UNFOLD = {
         "600":"147 51 234","700":"126 34 206","800":"107 33 168",
         "900":"88 28 135","950":"59 7 100",
     }},
-    "SIDEBAR": {
+        "SIDEBAR": {
         "show_search": True,
         "show_all_applications": True,
         "navigation": [
@@ -167,14 +168,16 @@ UNFOLD = {
                 {"title":"Podio",      "icon":"workspace_premium", "link":"/system-control-panel-89721/contests/finalresult/"},
             ]},
             {"title":"Apuestas","separator":True,"items":[
-                {"title":"Opciones",    "icon":"bolt",                "link":"/system-control-panel-89721/bets/betoption/"},
-                {"title":"Tickets",     "icon":"confirmation_number", "link":"/system-control-panel-89721/bets/bet/"},
-                {"title":"Billeteras",  "icon":"wallet",              "link":"/system-control-panel-89721/bets/wallet/"},
+                {"title":"Opciones",   "icon":"bolt",                "link":"/system-control-panel-89721/bets/betoption/"},
+                {"title":"Tickets",    "icon":"confirmation_number", "link":"/system-control-panel-89721/bets/bet/"},
+                {"title":"Billeteras", "icon":"wallet",              "link":"/system-control-panel-89721/bets/wallet/"},
             ]},
-            {"title":"Tienda","separator":True,"items":[{"title":"Premios","icon":"redeem","link":"/system-control-panel-89721/store/storeitem/"},{"title":"Solicitudes","icon":"move_to_inbox","link":"/system-control-panel-89721/store/redemption/"}]},
+            {"title":"Tienda","separator":True,"items":[
+                {"title":"Premios",     "icon":"redeem",        "link":"/system-control-panel-89721/store/storeitem/"},
+                {"title":"Solicitudes", "icon":"move_to_inbox", "link":"/system-control-panel-89721/store/redemption/"},
+            ]},
             {"title":"Predicciones","separator":True,"items":[
-                {"title":"Tienda","separator":True,"items":[{"title":"Premios","icon":"redeem","link":"/system-control-panel-89721/store/storeitem/"},{"title":"Solicitudes","icon":"move_to_inbox","link":"/system-control-panel-89721/store/redemption/"}]},
-            {"title":"Predicciones","icon":"psychology","link":"/system-control-panel-89721/predictions/prediction/"},
+                {"title":"Predicciones","icon":"psychology","link":"/system-control-panel-89721/predictions/prediction/"},
             ]},
             {"title":"Usuarios","separator":True,"items":[
                 {"title":"Usuarios","icon":"manage_accounts","link":"/system-control-panel-89721/accounts/customuser/"},
