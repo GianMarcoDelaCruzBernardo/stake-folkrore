@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Predicciones — StakeFolclor{% endblock %}
+
+{% block extra_css %}
+<style>
+.pred-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.25rem; }
+.pred-contest-card {
+  background:var(--surface,#111220); border:1px solid var(--border,rgba(139,92,246,.12));
+  border-radius:16px; overflow:hidden; transition:all .3s; display:flex; flex-direction:column;
+}
+.pred-contest-card:hover { border-color:var(--gold,#d4a857); transform:translateY(-3px); box-shadow:0 8px 32px rgba(0,0,0,.4); }
+.pred-contest-img { width:100%; height:160px; object-fit:cover; }
+.pred-contest-ph { width:100%; height:160px; background:rgba(212,168,87,.06); display:flex; align-items:center; justify-content:center; font-size:3rem; color:rgba(212,168,87,.2); }
+.pred-contest-body { padding:1.2rem; flex:1; display:flex; flex-direction:column; gap:.5rem; }
+.pred-contest-name { font-family:'Rajdhani',sans-serif; font-size:1.1rem; font-weight:700; color:#f5efe6; }
+.pred-btn { display:flex; align-items:center; justify-content:center; gap:.4rem; padding:.6rem 1rem; border-radius:8px; font-size:.84rem; font-weight:600; text-decoration:none; transition:all .2s; width:100%; margin-top:auto; }
+.pred-btn-vote  { background:var(--gold,#d4a857); color:#0f0b08; }
+.pred-btn-vote:hover  { opacity:.88; }
+.pred-btn-voted { background:rgba(16,185,129,.12); color:#10b981; border:1px solid rgba(16,185,129,.3); }
+.pred-btn-voted:hover { background:rgba(16,185,129,.2); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="padding:3rem 0">
+  <div class="mb-4">
+    <p style="font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold,#d4a857);margin-bottom:.4rem">
+      <i class="bi bi-graph-up me-1"></i>Pronósticos
+    </p>
+    <h1 style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:#f5efe6;margin-bottom:.3rem">
+      Predicciones
+    </h1>
+    <p style="color:#94a3b8;font-size:.9rem">Elige un concurso y vota por el campeón.</p>
+  </div>
+
+  {% if contests %}
+  <div class="pred-grid">
+    {% for contest in contests %}
+    <div class="pred-contest-card">
+      {% if contest.flyer %}
+        <img src="{{ contest.flyer.url }}" class="pred-contest-img" alt="{{ contest.name }}">
+      {% else %}
+        <div class="pred-contest-ph"><i class="bi bi-trophy-fill"></i></div>
+      {% endif %}
+      <div class="pred-contest-body">
+        <div class="pred-contest-name">{{ contest.name }}</div>
+        <div style="font-size:.75rem;color:#94a3b8">
+          <i class="bi bi-calendar3 me-1"></i>{{ contest.date|date:"d M Y" }}
+          &nbsp;&bull;&nbsp;
+          <i class="bi bi-geo-alt me-1"></i>{{ contest.location }}
+        </div>
+        <div style="margin-top:.25rem">
+          {% if contest.status == 'finished' %}
+            <span style="font-size:.68rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:rgba(100,100,120,.15);color:#64748b;border:1px solid rgba(100,100,120,.25);padding:.2rem .6rem;border-radius:5px">Finalizado</span>
+          {% elif contest.status == 'final' %}
+            <span style="font-size:.68rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:rgba(212,168,87,.12);color:var(--gold,#d4a857);border:1px solid rgba(212,168,87,.25);padding:.2rem .6rem;border-radius:5px">En Final</span>
+          {% else %}
+            <span style="font-size:.68rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:rgba(16,185,129,.12);color:#10b981;border:1px solid rgba(16,185,129,.25);padding:.2rem .6rem;border-radius:5px">En Curso</span>
+          {% endif %}
+        </div>
+        {% if contest.id in user_pred_ids %}
+          <a href="{% url 'predictions:vote' contest.slug %}" class="pred-btn pred-btn-voted mt-2">
+            <i class="bi bi-check-circle-fill"></i>Ya votaste — ver mi voto
+          </a>
+        {% else %}
+          <a href="{% url 'predictions:vote' contest.slug %}" class="pred-btn pred-btn-vote mt-2">
+            <i class="bi bi-lightning-charge-fill"></i>Votar ahora
+          </a>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div style="text-align:center;padding:5rem 0;color:#475569">
+    <i class="bi bi-trophy" style="font-size:3rem;display:block;margin-bottom:1rem;opacity:.4"></i>
+    <p>No hay concursos disponibles para predecir por el momento.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

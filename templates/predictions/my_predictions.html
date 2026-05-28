@@ -1,161 +1,88 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load humanize %}
 {% block title %}Mis Predicciones — StakeFolclor{% endblock %}
 
-{% block content %}
-<div class="container" style="padding:3.5rem 0">
+{% block extra_css %}
+<style>
+.mypred-card {
+  background:var(--surface,#111220); border:1px solid var(--border,rgba(139,92,246,.12));
+  border-radius:14px; padding:1.25rem 1.4rem; margin-bottom:.75rem;
+  display:flex; gap:1rem; align-items:center;
+}
+.mypred-card.correct { border-color:rgba(16,185,129,.35); background:rgba(16,185,129,.04); }
+.mypred-card.wrong   { border-color:rgba(239,68,68,.3);   background:rgba(239,68,68,.04); }
+.mypred-card.pending { border-color:rgba(245,158,11,.25); }
+.mypred-logo { width:56px; height:56px; border-radius:50%; object-fit:cover; flex-shrink:0; border:2px solid rgba(255,255,255,.08); }
+.mypred-logo-ph { width:56px; height:56px; border-radius:50%; background:rgba(212,168,87,.08); display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:rgba(212,168,87,.3); flex-shrink:0; }
+</style>
+{% endblock %}
 
-  <div class="d-flex align-items-end justify-content-between mb-4 flex-wrap gap-3">
+{% block content %}
+<div class="container" style="padding:3rem 0">
+
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1.75rem;flex-wrap:wrap;gap:1rem">
     <div>
-      <div style="font-family:'Poppins',sans-serif;font-size:.65rem;font-weight:600;letter-spacing:2.5px;
-                  text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:.4rem;margin-bottom:.5rem">
-        <span style="width:22px;height:1.5px;background:var(--gold);border-radius:1px;display:inline-block"></span>
-        Mis Pronósticos
-      </div>
-      <h1 style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;
-                 color:var(--text-body);margin:0">Predicciones</h1>
-      <p style="font-family:'Poppins',sans-serif;font-size:.86rem;color:var(--text-muted);margin-top:.3rem">
-        Tus pronósticos se resuelven solos con los resultados
-      </p>
+      <h1 style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#f5efe6;margin-bottom:.2rem">Mis Predicciones</h1>
+      <p style="color:#94a3b8;font-size:.85rem">Historial de tus votos por el campeón.</p>
     </div>
-    <div style="display:flex;gap:1rem;align-items:center;font-family:'Poppins',sans-serif;font-size:.74rem">
-      <span style="display:flex;align-items:center;gap:.35rem">
-        <span style="width:9px;height:9px;border-radius:50%;background:#10b981;display:inline-block"></span>
-        Acertó
-      </span>
-      <span style="display:flex;align-items:center;gap:.35rem">
-        <span style="width:9px;height:9px;border-radius:50%;background:#ef4444;display:inline-block"></span>
-        Falló
-      </span>
-      <span style="display:flex;align-items:center;gap:.35rem">
-        <span style="width:9px;height:9px;border-radius:50%;background:var(--text-muted);display:inline-block"></span>
-        Pendiente
-      </span>
-    </div>
+    <a href="{% url 'predictions:list' %}" style="font-size:.82rem;color:var(--gold,#d4a857);text-decoration:none;display:flex;align-items:center;gap:.35rem;border:1px solid rgba(212,168,87,.3);padding:.4rem .9rem;border-radius:8px">
+      <i class="bi bi-graph-up"></i>Predecir
+    </a>
   </div>
 
   {% if predictions %}
-  <div class="row g-4">
     {% for pred in predictions %}
-    {% with c=pred.counts acc=pred.get_accuracy %}
-    <div class="col-lg-6">
-      <div class="pred-card">
-
-        <!-- Header -->
-        <div class="pred-card-header">
-          <div class="d-flex align-items-start justify-content-between gap-2">
-            <div>
-              <div class="pred-card-title">{{ pred.contest.name }}</div>
-              <div class="pred-card-meta">
-                <span><i class="bi bi-calendar3"></i>{{ pred.contest.date|date:"d M Y" }}</span>
-                <span><i class="bi bi-geo-alt"></i>{{ pred.contest.location }}</span>
-              </div>
-            </div>
-            <span class="bdg bdg-{{ pred.contest.status }}" style="flex-shrink:0">
-              {% if pred.contest.status == 'active' %}En Curso
-              {% elif pred.contest.status == 'finished' %}Finalizado
-              {% elif pred.contest.status == 'final' %}En Final
-              {% else %}Próximo{% endif %}
-            </span>
-          </div>
+    {% with st=pred.status %}
+    <div class="mypred-card {{ st }}">
+      <div style="font-size:1.4rem;flex-shrink:0">
+        {% if st == 'correct' %}<i class="bi bi-check-circle-fill" style="color:#10b981"></i>
+        {% elif st == 'wrong'  %}<i class="bi bi-x-circle-fill"   style="color:#ef4444"></i>
+        {% else                %}<i class="bi bi-hourglass-split"  style="color:#f59e0b"></i>
+        {% endif %}
+      </div>
+      {% if pred.champion and pred.champion.logo %}
+        <img src="{{ pred.champion.logo.url }}" class="mypred-logo" alt="{{ pred.champion.name }}">
+      {% else %}
+        <div class="mypred-logo-ph"><i class="bi bi-music-note-beamed"></i></div>
+      {% endif %}
+      <div style="flex:1;min-width:0">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:1.05rem;font-weight:700;color:#f5efe6">{{ pred.contest.name }}</div>
+        <div style="font-size:.78rem;color:#94a3b8;margin-top:.15rem">
+          <i class="bi bi-trophy me-1"></i>Tu campeón:
+          <strong style="color:{% if st == 'correct' %}#10b981{% elif st == 'wrong' %}#ef4444{% else %}var(--gold,#d4a857){% endif %}">
+            {{ pred.champion.name|default:"Sin votar" }}
+          </strong>
         </div>
-
-        <!-- Mini stats -->
-        <div class="pred-stats-row">
-          <span class="pred-stat-chip correct">
-            <i class="bi bi-check-circle-fill me-1"></i>{{ c.correct }} acertadas
-          </span>
-          <span class="pred-stat-chip wrong">
-            <i class="bi bi-x-circle-fill me-1"></i>{{ c.wrong }} falladas
-          </span>
-          <span class="pred-stat-chip pending">
-            <i class="bi bi-clock me-1"></i>{{ c.pending }} pendientes
-          </span>
+        <div style="font-size:.72rem;color:#475569;margin-top:.2rem">
+          {{ pred.created_at|date:"d M Y H:i" }}
         </div>
-
-        <!-- Barra precisión -->
-        <div class="pred-accuracy-row">
-          <span class="pred-acc-label">Precisión</span>
-          <div class="pred-acc-bar-bg">
-            <div class="pred-acc-bar-fill
-              {% if c.pending == c.total %}pred-acc-fill-none
-              {% elif acc >= 70 %}pred-acc-fill-high
-              {% elif acc >= 40 %}pred-acc-fill-mid
-              {% else %}pred-acc-fill-low{% endif %}"
-              data-width="{% if c.pending == c.total %}0{% else %}{{ acc }}{% endif %}"
-              style="width:0%">
-            </div>
-          </div>
-          <div class="pred-acc-pct"
-               style="color:{% if c.pending == c.total %}var(--text-muted){% elif acc >= 70 %}#10b981{% elif acc >= 40 %}#f59e0b{% else %}#ef4444{% endif %}">
-            {% if c.pending == c.total %}—{% else %}{{ acc }}%{% endif %}
-          </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        {% if st == 'correct' %}
+          <span style="font-size:.7rem;font-weight:700;text-transform:uppercase;background:rgba(16,185,129,.12);color:#10b981;border:1px solid rgba(16,185,129,.25);padding:.2rem .6rem;border-radius:5px">Acertó</span>
+        {% elif st == 'wrong' %}
+          <span style="font-size:.7rem;font-weight:700;text-transform:uppercase;background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.25);padding:.2rem .6rem;border-radius:5px">Falló</span>
+        {% else %}
+          <span style="font-size:.7rem;font-weight:700;text-transform:uppercase;background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.25);padding:.2rem .6rem;border-radius:5px">Pendiente</span>
+        {% endif %}
+        {% if pred.contest.status != 'finished' %}
+        <div style="margin-top:.4rem">
+          <a href="{% url 'predictions:vote' pred.contest.slug %}" style="font-size:.72rem;color:var(--gold,#d4a857);text-decoration:none">Cambiar voto</a>
         </div>
-
-        <!-- Items -->
-        <div class="pred-body">
-          {% for item in pred.items.all %}
-          {% with st=item.status %}
-          <div class="poll-item pi-{{ st }}"
-               data-bar="{% if st == 'correct' %}100{% elif st == 'wrong' %}25{% else %}0{% endif %}">
-            <span class="poll-dot"></span>
-            <span class="poll-lbl">
-              {{ item.get_category_display }}
-              {% if item.position %} #{{ item.position }}{% endif %}
-              {% if item.block %}<br><small style="opacity:.65">{{ item.block.name }}</small>{% endif %}
-            </span>
-            <span class="poll-val">{{ item.predicted_group_name }}</span>
-            <span class="poll-bdg">
-              {% if st == 'correct' %}Acertó
-              {% elif st == 'wrong' %}Falló
-              {% else %}Pte.{% endif %}
-            </span>
-          </div>
-          {% endwith %}
-          {% endfor %}
-
-          <div class="d-flex gap-2 mt-3">
-            <a href="{% url 'contests:detail' pred.contest.slug %}"
-               class="btn-sf-out flex-grow-1 justify-content-center"
-               style="font-size:.8rem">
-              <i class="bi bi-eye"></i>Ver Concurso
-            </a>
-            {% if pred.contest.status != 'finished' %}
-            <a href="{% url 'predictions:make' pred.contest.slug %}"
-               class="btn-sf flex-grow-1 justify-content-center"
-               style="font-size:.8rem">
-              <i class="bi bi-pencil-square"></i>Editar
-            </a>
-            {% endif %}
-          </div>
-        </div>
-
+        {% endif %}
       </div>
     </div>
     {% endwith %}
     {% endfor %}
-  </div>
-
   {% else %}
-  <div style="text-align:center;padding:6rem 1rem">
-    <div style="width:72px;height:72px;background:var(--gold-dim);border:1px solid rgba(201,148,58,.18);
-                border-radius:50%;display:flex;align-items:center;justify-content:center;
-                margin:0 auto 1.3rem;font-size:1.9rem;color:var(--gold)">
-      <i class="bi bi-graph-up"></i>
-    </div>
-    <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--text-body);margin-bottom:.5rem">
-      Sin predicciones aún
-    </h3>
-    <p style="font-family:'Poppins',sans-serif;font-size:.87rem;color:var(--text-muted);
-              max-width:360px;margin:0 auto 1.5rem">
-      Elige un concurso y realiza tus primeras predicciones.
-    </p>
-    <a href="{% url 'contests:list' %}" class="hero-btn-primary d-inline-flex">
-      <i class="bi bi-trophy-fill"></i>Ver Concursos
+  <div style="text-align:center;padding:5rem 0;color:#475569">
+    <i class="bi bi-graph-up" style="font-size:3rem;display:block;margin-bottom:1rem;opacity:.4"></i>
+    <p>Aún no tienes predicciones registradas.</p>
+    <a href="{% url 'predictions:list' %}" style="display:inline-flex;align-items:center;gap:.4rem;margin-top:1rem;padding:.6rem 1.3rem;background:var(--gold,#d4a857);color:#0f0b08;border-radius:8px;font-weight:600;font-size:.85rem;text-decoration:none">
+      <i class="bi bi-trophy-fill"></i>Ir a Predicciones
     </a>
   </div>
   {% endif %}
 
 </div>
 {% endblock %}
-

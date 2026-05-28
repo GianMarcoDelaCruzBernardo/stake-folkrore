@@ -1,9 +1,11 @@
-﻿from django.urls import path
+from django.urls import path
 from . import views
 
-app_name = 'predictions'
+app_name = "predictions"
 
 urlpatterns = [
-    path('make/<slug:slug>/', views.make_prediction, name='make'),
-    path('mis-predicciones/', views.my_predictions, name='my_predictions'),
+    path("",                        views.prediction_contest_list, name="list"),
+    path("<slug:slug>/",            views.vote,                    name="vote"),
+    path("<slug:slug>/votar/",      views.submit_vote,             name="submit"),
+    path("mis-predicciones/",       views.my_predictions,          name="my_predictions"),
 ]
