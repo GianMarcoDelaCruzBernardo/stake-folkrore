@@ -1,4 +1,4 @@
-﻿from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from contests.models import Contest
@@ -19,26 +19,36 @@ def make_prediction(request, slug):
                 name = request.POST.get(f"block_{block.id}_qual_{i}", "").strip()
                 if name:
                     PredictionItem.objects.create(
-                        prediction=pred, category="block_qualifier",
-                        block=block, predicted_group_name=name, position=i,
+                        prediction=pred,
+                        category="block_qualifier",
+                        block=block,
+                        predicted_group_name=name,
+                        position=i,
                     )
-        for cat, key in [("champion", "champion"), ("top3", "top3_1"),
-                         ("top3", "top3_2"), ("top3", "top3_3")]:
-            if cat == "champion":
-                n = request.POST.get("champion", "").strip()
-                if n:
-                    PredictionItem.objects.create(prediction=pred, category="champion", predicted_group_name=n)
-            else:
-                pos = int(key[-1])
-                n = request.POST.get(key, "").strip()
-                if n:
-                    PredictionItem.objects.create(prediction=pred, category="top3", predicted_group_name=n, position=pos)
+        champion_name = request.POST.get("champion", "").strip()
+        if champion_name:
+            PredictionItem.objects.create(
+                prediction=pred,
+                category="champion",
+                predicted_group_name=champion_name,
+            )
+        for pos in range(1, 4):
+            top_name = request.POST.get(f"top3_{pos}", "").strip()
+            if top_name:
+                PredictionItem.objects.create(
+                    prediction=pred,
+                    category="top3",
+                    predicted_group_name=top_name,
+                    position=pos,
+                )
         messages.success(request, "Prediccion guardada.")
         return redirect("predictions:my_predictions")
 
     return render(request, "predictions/make_prediction.html", {
-        "contest": contest, "blocks": blocks,
-        "prediction": pred, "qualifiers_range": qrange,
+        "contest": contest,
+        "blocks": blocks,
+        "prediction": pred,
+        "qualifiers_range": qrange,
     })
 
 
@@ -48,7 +58,11 @@ def my_predictions(request):
         Prediction.objects
         .filter(user=request.user)
         .select_related("contest")
-        .prefetch_related("items", "items__block")
+        .prefetch_related(
+            "items",
+            "items__block",
+            "contest__final_results",
+        )
         .order_by("-created_at")
     )
     return render(request, "predictions/my_predictions.html", {"predictions": preds})

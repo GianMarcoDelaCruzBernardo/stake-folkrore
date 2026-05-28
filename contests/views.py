@@ -1,9 +1,9 @@
-﻿from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from .models import Contest, Group, FinalGroup, FinalResult
 
 
 def contest_list(request):
-    contests = Contest.objects.filter(is_active=True)
+    contests = Contest.objects.filter(is_active=True).order_by("-date")
     return render(request, "contests/contest_list.html", {"contests": contests})
 
 
@@ -12,20 +12,25 @@ def contest_detail(request, slug):
     jn  = contest.judges_count
     fjn = contest.final_judges_count
 
-    # Bloques normales
+    # Bloques normales — prefetch evita N+1 queries de scores
     blocks_data = []
     for block in contest.get_blocks().prefetch_related("groups__scores"):
         rows = []
         for g in block.get_groups():
+            # Usar scores ya en cache del prefetch, no llamar .all() de nuevo
+            scores_cached = list(g.scores.all())
+            scores_dict   = {s.judge_number: s.score for s in scores_cached}
+            total         = sum(s.score for s in scores_cached)
+            scores_list   = [scores_dict.get(i) for i in range(1, jn + 1)]
             rows.append({
                 "group":  g,
-                "scores": g.get_scores_list(jn),
-                "total":  g.get_total_score(),
+                "scores": scores_list,
+                "total":  total,
             })
         rows.sort(key=lambda x: x["total"], reverse=True)
         blocks_data.append({"block": block, "groups": rows})
 
-    # Tabla final: todos los clasificados ordenados por total final
+    # Tabla final — mismo patron con final_scores prefetcheado
     final_qs = (
         FinalGroup.objects
         .filter(contest=contest)
@@ -34,14 +39,18 @@ def contest_detail(request, slug):
     )
     final_rows = []
     for fg in final_qs:
+        fs_cached   = list(fg.final_scores.all())
+        fs_dict     = {s.judge_number: s.score for s in fs_cached}
+        total       = sum(s.score for s in fs_cached)
+        scores_list = [fs_dict.get(i) for i in range(1, fjn + 1)]
         final_rows.append({
             "fg":     fg,
-            "scores": fg.get_scores_list(fjn),
-            "total":  fg.get_total_score(),
+            "scores": scores_list,
+            "total":  total,
         })
     final_rows_ranked = sorted(final_rows, key=lambda x: x["total"], reverse=True)
 
-    # Podio
+    # Podio — solo 3 registros
     podium = list(contest.final_results.order_by("position")[:3])
 
     # Todos los participantes
@@ -53,13 +62,13 @@ def contest_detail(request, slug):
     )
 
     ctx = {
-        "contest":              contest,
-        "blocks_data":          blocks_data,
-        "judge_range":          range(1, jn  + 1),
-        "final_judge_range":    range(1, fjn + 1),
-        "final_rows":           final_rows_ranked,
-        "has_final":            final_qs.exists(),
-        "podium":               podium,
-        "all_groups":           all_groups,
+        "contest":           contest,
+        "blocks_data":       blocks_data,
+        "judge_range":       range(1, jn  + 1),
+        "final_judge_range": range(1, fjn + 1),
+        "final_rows":        final_rows_ranked,
+        "has_final":         final_qs.exists(),
+        "podium":            podium,
+        "all_groups":        all_groups,
     }
     return render(request, "contests/contest_detail.html", ctx)

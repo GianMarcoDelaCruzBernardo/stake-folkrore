@@ -1,4 +1,4 @@
-﻿from django.db import models
+from django.db import models
 from django.conf import settings
 from contests.models import Contest, Block, Group
 
@@ -8,34 +8,38 @@ def _n(s):
 
 
 class Prediction(models.Model):
-    user      = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="predictions")
-    contest   = models.ForeignKey(Contest, on_delete=models.CASCADE, related_name="predictions")
+    user       = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="predictions")
+    contest    = models.ForeignKey(Contest, on_delete=models.CASCADE, related_name="predictions")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = "Prediccion"
+        verbose_name        = "Prediccion"
         verbose_name_plural = "Predicciones"
-        unique_together = ("user", "contest")
+        unique_together     = ("user", "contest")
 
     def __str__(self):
         return f"{self.user.username} — {self.contest.name}"
 
-    def get_accuracy(self):
-        items = list(self.items.all())
-        resolved = [it for it in items if it.status() != "pending"]
-        if not resolved:
-            return None
-        correct = sum(1 for it in resolved if it.status() == "correct")
-        return round(correct / len(resolved) * 100)
-
     def counts(self):
-        items = list(self.items.all())
-        resolved = [it for it in items if it.status() != "pending"]
-        correct  = sum(1 for it in resolved if it.status() == "correct")
-        wrong    = len(resolved) - correct
-        pending  = len(items) - len(resolved)
+        """
+        Calcula status de cada item UNA sola vez para evitar N+1.
+        items debe venir prefetcheado desde la view.
+        """
+        items    = list(self.items.all())
+        statuses = [it.status() for it in items]
+        correct  = statuses.count("correct")
+        wrong    = statuses.count("wrong")
+        pending  = statuses.count("pending")
         return {"correct": correct, "wrong": wrong, "pending": pending, "total": len(items)}
+
+    def get_accuracy(self):
+        """Porcentaje de aciertos sobre items ya resueltos."""
+        c = self.counts()
+        resolved = c["correct"] + c["wrong"]
+        if resolved == 0:
+            return None
+        return round(c["correct"] / resolved * 100)
 
 
 class PredictionItem(models.Model):
@@ -51,7 +55,7 @@ class PredictionItem(models.Model):
     position             = models.PositiveIntegerField(null=True, blank=True)
 
     class Meta:
-        verbose_name = "Item de Prediccion"
+        verbose_name        = "Item de Prediccion"
         verbose_name_plural = "Items de Prediccion"
 
     def __str__(self):
@@ -59,7 +63,7 @@ class PredictionItem(models.Model):
 
     def is_correct(self):
         contest = self.prediction.contest
-        name = _n(self.predicted_group_name)
+        name    = _n(self.predicted_group_name)
 
         if self.category == "block_qualifier" and self.block_id:
             qs = Group.objects.filter(block_id=self.block_id, qualified=True)

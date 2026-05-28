@@ -1,4 +1,4 @@
-﻿"""
+"""
 contests/services.py
 ====================
 Toda la logica de negocio del sistema de concursos.
@@ -6,14 +6,12 @@ Views y signals solo llaman a estos metodos.
 """
 from __future__ import annotations
 from decimal import Decimal
-from typing import Optional
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-# ── Odds calculation ─────────────────────────────────────────
-def calculate_champion_odds(score: int, all_scores: list[int]) -> Decimal:
+def calculate_champion_odds(score: int, all_scores: list) -> Decimal:
     """
     Cuota del campeon basada en puntaje relativo.
     Mayor puntaje = favorito = cuota baja (1.20).
@@ -25,16 +23,15 @@ def calculate_champion_odds(score: int, all_scores: list[int]) -> Decimal:
     min_s = min(all_scores)
     if max_s == min_s:
         return Decimal("1.53")
-    ratio = (score - min_s) / (max_s - min_s)   # 0..1
+    ratio = (score - min_s) / (max_s - min_s)
     raw = Decimal("2.00") - Decimal(str(round(ratio * 0.80, 2)))
     return max(Decimal("1.20"), min(Decimal("2.00"), round(raw, 2)))
 
 
-# ── FinalGroup management ────────────────────────────────────
 def add_group_to_final(group) -> None:
     """
     Agrega una agrupacion clasificada a FinalGroup.
-    Idem-potente: no duplica si ya existe.
+    Idempotente: no duplica si ya existe.
     """
     from contests.models import FinalGroup
     fg, created = FinalGroup.objects.get_or_create(
@@ -102,20 +99,11 @@ def refresh_champion_odds(contest) -> None:
         ).update(odds=new_odds)
 
 
-# ── Bet market management ────────────────────────────────────
-def close_market_for_option(bet_option) -> None:
-    """
-    Cierra un mercado: desactiva la opcion y marca como resuelta.
-    No se pueden hacer nuevas apuestas.
-    """
-    bet_option.is_active = False
-    bet_option.save(update_fields=["is_active"])
-
-
 def resolve_bets_for_contest(contest) -> dict:
     """
     Resuelve todas las apuestas pendientes de un concurso.
-    Retorna resumen: {won: N, lost: N, refunded: N}
+    Usa prefetch para reducir queries en el loop de pago.
+    Retorna resumen: {won: N, lost: N}
     """
     from django.utils import timezone
     from bets.models import BetOption, Bet, Wallet
@@ -125,40 +113,51 @@ def resolve_bets_for_contest(contest) -> dict:
     def _norm(s: str) -> str:
         return s.strip().lower()
 
-    # ── Clasificados de bloque ────────────────────────────
-    for opt in BetOption.objects.filter(
-        contest=contest, bet_type="block_qualifier", is_resolved=False
-    ).select_related("block"):
+    # Resolver clasificados de bloque
+    block_opts = (
+        BetOption.objects
+        .filter(contest=contest, bet_type="block_qualifier", is_resolved=False)
+        .select_related("block")
+    )
+    for opt in block_opts:
         if not opt.block:
             continue
         from contests.models import Group
         qualified = Group.objects.filter(block=opt.block, qualified=True)
         if not qualified.exists():
-            continue  # aun pendiente
+            continue
         names = [_norm(g.name) for g in qualified]
         opt.won = _norm(opt.group_name) in names
         opt.is_resolved = True
         opt.is_active = False
         opt.save(update_fields=["won", "is_resolved", "is_active"])
 
-    # ── Campeon ───────────────────────────────────────────
+    # Resolver campeon
     champion = contest.final_results.filter(position=1).first()
     if champion:
-        for opt in BetOption.objects.filter(
+        champ_opts = BetOption.objects.filter(
             contest=contest, bet_type="champion", is_resolved=False
-        ):
+        )
+        for opt in champ_opts:
             opt.won = _norm(opt.group_name) == _norm(champion.group_name)
             opt.is_resolved = True
             opt.is_active = False
             opt.save(update_fields=["won", "is_resolved", "is_active"])
 
-    # ── Pagar / descontar ─────────────────────────────────
-    resolved_opts = BetOption.objects.filter(contest=contest, is_resolved=True, won__isnull=False)
+    # Pagar / descontar — prefetch para reducir queries
+    resolved_opts = BetOption.objects.filter(
+        contest=contest, is_resolved=True, won__isnull=False
+    )
     for opt in resolved_opts:
-        for bet in Bet.objects.filter(option=opt, status="pending").select_related("user"):
+        pending_bets = (
+            Bet.objects
+            .filter(option=opt, status="pending")
+            .select_related("user")
+        )
+        for bet in pending_bets:
             wallet, _ = Wallet.objects.get_or_create(user=bet.user)
             if opt.won:
-                wallet.balance += bet.potential_win
+                wallet.balance  += bet.potential_win
                 wallet.total_won += bet.potential_win
                 bet.status = "won"
                 summary["won"] += 1
@@ -178,7 +177,6 @@ def generate_block_bet_options(contest, activate: bool = False) -> int:
     """
     Crea BetOption (cuota 1.53) para cada agrupacion de cada bloque.
     activate=False: desactivadas hasta que admin las active.
-    Retorna cantidad creada.
     """
     from bets.models import BetOption
     created = 0
@@ -208,15 +206,17 @@ def generate_champion_bet_options(contest, activate: bool = False) -> int:
     """
     from contests.models import FinalGroup
     from bets.models import BetOption
-    groups = list(FinalGroup.objects.filter(contest=contest).prefetch_related("final_scores", "source_group"))
+    groups = list(
+        FinalGroup.objects
+        .filter(contest=contest)
+        .prefetch_related("final_scores", "source_group")
+    )
     if not groups:
         return 0
-    scores = []
-    for fg in groups:
-        if fg.source_group:
-            scores.append(fg.source_group.get_total_score())
-        else:
-            scores.append(fg.get_total_score())
+    scores = [
+        fg.source_group.get_total_score() if fg.source_group else fg.get_total_score()
+        for fg in groups
+    ]
     created = 0
     for fg, score in zip(groups, scores):
         odds = calculate_champion_odds(score, scores)
@@ -228,8 +228,10 @@ def generate_champion_bet_options(contest, activate: bool = False) -> int:
         )
         if not was_new:
             BetOption.objects.filter(
-                contest=contest, bet_type="champion",
-                group_name=fg.name, is_resolved=False,
+                contest=contest,
+                bet_type="champion",
+                group_name=fg.name,
+                is_resolved=False,
             ).update(odds=odds)
         else:
             created += 1

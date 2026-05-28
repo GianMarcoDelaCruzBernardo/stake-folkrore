@@ -2,7 +2,6 @@ import os
 import dj_database_url
 from pathlib import Path
 import cloudinary
-import cloudinary.uploader
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -44,6 +43,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+ROOT_URLCONF = "stakefolclor.wsgi.application"
 
 ROOT_URLCONF = "stakefolclor.urls"
 
@@ -97,16 +98,14 @@ TIME_ZONE     = "America/Lima"
 USE_I18N = True
 USE_TZ   = True
 
-STATIC_URL   = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT  = BASE_DIR / "staticfiles"
+STATIC_URL        = "/static/"
+STATICFILES_DIRS  = [BASE_DIR / "static"]
+STATIC_ROOT       = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL  = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# Cloudinary - almacenamiento de imagenes en produccion
-# Una sola vez, sin duplicado
 CLOUDINARY_STORAGE = {
     "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
     "API_KEY":    os.environ.get("CLOUDINARY_API_KEY"),
@@ -128,7 +127,7 @@ LOGIN_REDIRECT_URL  = "/"
 LOGOUT_REDIRECT_URL = "/"
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-CRISPY_TEMPLATE_PACK = "bootstrap5"
+CRISPY_TEMPLATE_PACK          = "bootstrap5"
 
 LOGGING = {
     "version": 1,
@@ -157,20 +156,20 @@ UNFOLD = {
                 {"title":"Dashboard","icon":"dashboard","link":"/system-control-panel-89721/"},
             ]},
             {"title":"Concursos","separator":True,"items":[
-                {"title":"Concursos",   "icon":"emoji_events", "link":"/system-control-panel-89721/contests/contest/"},
-                {"title":"Bloques",     "icon":"grid_view",    "link":"/system-control-panel-89721/contests/block/"},
-                {"title":"Agrupaciones","icon":"groups",       "link":"/system-control-panel-89721/contests/group/"},
-                {"title":"Jurados",     "icon":"gavel",        "link":"/system-control-panel-89721/contests/judge/"},
-                {"title":"Puntajes",    "icon":"scoreboard",   "link":"/system-control-panel-89721/contests/score/"},
+                {"title":"Concursos",    "icon":"emoji_events", "link":"/system-control-panel-89721/contests/contest/"},
+                {"title":"Bloques",      "icon":"grid_view",    "link":"/system-control-panel-89721/contests/block/"},
+                {"title":"Agrupaciones", "icon":"groups",       "link":"/system-control-panel-89721/contests/group/"},
+                {"title":"Jurados",      "icon":"gavel",        "link":"/system-control-panel-89721/contests/judge/"},
+                {"title":"Puntajes",     "icon":"scoreboard",   "link":"/system-control-panel-89721/contests/score/"},
             ]},
             {"title":"Final","separator":True,"items":[
                 {"title":"Tabla Final","icon":"military_tech",     "link":"/system-control-panel-89721/contests/finalgroup/"},
                 {"title":"Podio",      "icon":"workspace_premium", "link":"/system-control-panel-89721/contests/finalresult/"},
             ]},
             {"title":"Apuestas","separator":True,"items":[
-                {"title":"Opciones",   "icon":"bolt",                "link":"/system-control-panel-89721/bets/betoption/"},
-                {"title":"Tickets",    "icon":"confirmation_number", "link":"/system-control-panel-89721/bets/bet/"},
-                {"title":"Billeteras", "icon":"wallet",              "link":"/system-control-panel-89721/bets/wallet/"},
+                {"title":"Opciones",    "icon":"bolt",                "link":"/system-control-panel-89721/bets/betoption/"},
+                {"title":"Tickets",     "icon":"confirmation_number", "link":"/system-control-panel-89721/bets/bet/"},
+                {"title":"Billeteras",  "icon":"wallet",              "link":"/system-control-panel-89721/bets/wallet/"},
             ]},
             {"title":"Predicciones","separator":True,"items":[
                 {"title":"Predicciones","icon":"psychology","link":"/system-control-panel-89721/predictions/prediction/"},
@@ -181,9 +180,3 @@ UNFOLD = {
         ],
     },
 }
-
-# DEBUG temporal - borrar despues
-
-print("=== CLOUDINARY CONFIG ===")
-print("CLOUD_NAME:", os.environ.get("CLOUDINARY_CLOUD_NAME"))
-print("DEFAULT_FILE_STORAGE:", DEFAULT_FILE_STORAGE if 'DEFAULT_FILE_STORAGE' in dir() else "NO SETEADO")

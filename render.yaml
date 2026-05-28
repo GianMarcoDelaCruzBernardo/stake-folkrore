@@ -1,4 +1,4 @@
-﻿services:
+services:
   - type: web
     name: stakefolclor
     env: python
@@ -7,9 +7,7 @@
     envVars:
       - key: DEBUG
         value: False
-
       - key: PYTHON_VERSION
         value: 3.11.9
-
       - key: WEB_CONCURRENCY
-        value: 4
+        value: 2
