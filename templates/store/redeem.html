@@ -1,3 +1,4 @@
+{% load humanize %}
 {% extends 'base.html' %}
 {% block title %}Canjear — {{ item.name }}{% endblock %}
 
@@ -56,7 +57,7 @@
     <div style="color:#f87171;font-weight:600;margin-bottom:.3rem">Saldo insuficiente</div>
     <div style="font-size:.82rem;color:#94a3b8">
       Necesitas <strong style="color:var(--gold,#d4a857)">S/{{ item.price|floatformat:0 }}</strong> y tienes
-      <strong style="color:#f87171">S/{{ wallet.balance|floatformat:2 }}</strong>.
+      <strong style="color:#f87171">S/{{ wallet.balance|floatformat:2|intcomma }}</strong>.
     </div>
   </div>
 

@@ -1,3 +1,4 @@
+{% load humanize %}
 {% extends 'base.html' %}
 {% block title %}Tienda de Premios — StakeFolclor{% endblock %}
 
@@ -58,7 +59,7 @@
     <i class="bi bi-wallet2" style="font-size:1.4rem;color:var(--gold,#d4a857)"></i>
     <div>
       <div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.8px;color:#94a3b8">Tu saldo disponible</div>
-      <div class="wallet-num">S/ {{ wallet.balance|floatformat:2 }}</div>
+      <div class="wallet-num">S/ {{ wallet.balance|floatformat:2|intcomma }}</div>
     </div>
     <div class="ms-auto">
       <a href="{% url 'store:my_redemptions' %}" style="font-size:.8rem;color:var(--gold,#d4a857);text-decoration:none;display:flex;align-items:center;gap:.35rem;border:1px solid rgba(212,168,87,.3);padding:.35rem .85rem;border-radius:7px">

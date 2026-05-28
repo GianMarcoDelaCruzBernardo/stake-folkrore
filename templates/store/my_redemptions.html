@@ -1,3 +1,4 @@
+{% load humanize %}
 {% extends 'base.html' %}
 {% block title %}Mis Canjes — StakeFolclor{% endblock %}
 
@@ -38,7 +39,7 @@
   <div style="background:rgba(212,168,87,.06);border:1px solid rgba(212,168,87,.15);border-radius:10px;padding:.8rem 1.2rem;display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem">
     <i class="bi bi-wallet2" style="color:var(--gold,#d4a857)"></i>
     <span style="font-size:.82rem;color:#94a3b8">Saldo actual:</span>
-    <span style="font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;color:var(--gold,#d4a857)">S/ {{ wallet.balance|floatformat:2 }}</span>
+    <span style="font-family:'Rajdhani',sans-serif;font-size:1.2rem;font-weight:700;color:var(--gold,#d4a857)">S/ {{ wallet.balance|floatformat:2|intcomma }}</span>
   </div>
   {% endif %}
 
