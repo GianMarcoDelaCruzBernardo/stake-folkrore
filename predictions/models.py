@@ -1,12 +1,12 @@
 from django.db import models
 from django.conf import settings
-from contests.models import Contest, FinalGroup
+from contests.models import Contest, FinalGroup, Group
 
 
 class Prediction(models.Model):
     user       = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="predictions")
     contest    = models.ForeignKey(Contest, on_delete=models.CASCADE, related_name="predictions")
-    champion   = models.ForeignKey(FinalGroup, on_delete=models.SET_NULL, null=True, blank=True, related_name="champion_predictions")
+    champion   = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name="champion_predictions")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
