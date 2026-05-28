@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block title %}Tienda de Premios — StakeFolclor{% endblock %}
+
+{% block extra_css %}
+<style>
+.store-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.25rem; }
+.store-card {
+  background:var(--surface,#111220); border:1px solid var(--border,rgba(139,92,246,.12));
+  border-radius:16px; overflow:hidden; transition:all .3s;
+  display:flex; flex-direction:column;
+}
+.store-card:hover { border-color:var(--gold,#d4a857); transform:translateY(-3px); box-shadow:0 8px 32px rgba(0,0,0,.4); }
+.store-card-img { width:100%; height:180px; object-fit:cover; }
+.store-card-ph { width:100%; height:180px; background:var(--surface2,#181928); display:flex; align-items:center; justify-content:center; font-size:3rem; color:rgba(200,180,100,.2); }
+.store-card-body { padding:1.2rem; flex:1; display:flex; flex-direction:column; gap:.5rem; }
+.store-card-name { font-family:'Rajdhani',sans-serif; font-size:1.1rem; font-weight:700; color:#f5efe6; }
+.store-card-desc { font-size:.78rem; color:#94a3b8; line-height:1.5; flex:1; }
+.price-tag {
+  display:inline-flex; align-items:center; gap:.35rem;
+  font-family:'Rajdhani',sans-serif; font-size:1.4rem; font-weight:700;
+  color:var(--gold,#d4a857);
+}
+.stock-badge { font-size:.68rem; color:#94a3b8; }
+.btn-canjear {
+  display:flex; align-items:center; justify-content:center; gap:.4rem;
+  padding:.6rem 1rem; border-radius:8px; font-size:.84rem; font-weight:600;
+  text-decoration:none; cursor:pointer; border:none; transition:all .2s;
+  width:100%;
+}
+.btn-canjear.active { background:var(--gold,#d4a857); color:#0f0b08; }
+.btn-canjear.active:hover { opacity:.88; transform:translateY(-1px); }
+.btn-canjear.disabled { background:rgba(255,255,255,.06); color:#475569; cursor:not-allowed; }
+.wallet-strip {
+  background:linear-gradient(90deg,rgba(212,168,87,.1),rgba(212,168,87,.04));
+  border:1px solid rgba(212,168,87,.2); border-radius:12px;
+  padding:.9rem 1.4rem; display:flex; align-items:center; gap:1rem;
+  margin-bottom:2rem; flex-wrap:wrap;
+}
+.wallet-num { font-family:'Rajdhani',sans-serif; font-size:1.8rem; font-weight:700; color:var(--gold,#d4a857); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="padding:3rem 0">
+
+  <div class="mb-4">
+    <p style="font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold,#d4a857);margin-bottom:.4rem">
+      <i class="bi bi-star-fill me-1"></i>Exclusivo para usuarios
+    </p>
+    <h1 style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:#f5efe6;margin-bottom:.3rem">
+      Tienda de Premios
+    </h1>
+    <p style="color:#94a3b8;font-size:.9rem">Canjea tu saldo virtual por premios reales.</p>
+  </div>
+
+  {% if user.is_authenticated and wallet %}
+  <div class="wallet-strip">
+    <i class="bi bi-wallet2" style="font-size:1.4rem;color:var(--gold,#d4a857)"></i>
+    <div>
+      <div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.8px;color:#94a3b8">Tu saldo disponible</div>
+      <div class="wallet-num">S/ {{ wallet.balance|floatformat:2 }}</div>
+    </div>
+    <div class="ms-auto">
+      <a href="{% url 'store:my_redemptions' %}" style="font-size:.8rem;color:var(--gold,#d4a857);text-decoration:none;display:flex;align-items:center;gap:.35rem;border:1px solid rgba(212,168,87,.3);padding:.35rem .85rem;border-radius:7px">
+        <i class="bi bi-bag-check"></i>Mis canjes
+      </a>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if items %}
+  <div class="store-grid">
+    {% for item in items %}
+    <div class="store-card">
+      {% if item.image %}
+        <img src="{{ item.image.url }}" class="store-card-img" alt="{{ item.name }}">
+      {% else %}
+        <div class="store-card-ph"><i class="bi bi-gift"></i></div>
+      {% endif %}
+      <div class="store-card-body">
+        <div class="store-card-name">{{ item.name }}</div>
+        {% if item.description %}
+        <div class="store-card-desc">{{ item.description }}</div>
+        {% endif %}
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.25rem">
+          <div class="price-tag"><i class="bi bi-coin"></i>{{ item.price|floatformat:0 }} soles</div>
+          <div class="stock-badge">
+            {% if item.stock == 0 %}Ilimitado{% else %}{{ item.stock }} disponibles{% endif %}
+          </div>
+        </div>
+        {% if user.is_authenticated %}
+          {% if wallet and wallet.balance >= item.price %}
+            <a href="{% url 'store:redeem' item.pk %}" class="btn-canjear active mt-1">
+              <i class="bi bi-lightning-charge-fill"></i>Canjear ahora
+            </a>
+          {% else %}
+            <button class="btn-canjear disabled mt-1" disabled title="Saldo insuficiente">
+              <i class="bi bi-lock-fill"></i>Saldo insuficiente
+            </button>
+          {% endif %}
+        {% else %}
+          <a href="{% url 'accounts:login' %}" class="btn-canjear active mt-1" style="background:rgba(212,168,87,.15);color:var(--gold,#d4a857)">
+            <i class="bi bi-person"></i>Ingresa para canjear
+          </a>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div style="text-align:center;padding:5rem 0;color:#475569">
+    <i class="bi bi-shop" style="font-size:3rem;display:block;margin-bottom:1rem;opacity:.4"></i>
+    <p>No hay premios disponibles por el momento.</p>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
