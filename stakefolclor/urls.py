@@ -8,7 +8,7 @@ urlpatterns = [
     path("", include("core.urls")),
     path("accounts/", include("accounts.urls")),
     path("contests/", include("contests.urls")),
-    path("predictions/", include("predictions.urls")),
+    path("predictions/", include("predictions.urls", namespace="predictions")),
     path("dashboard/", include("dashboard.urls")),
     path("apuestas/", include("bets.urls")),
     path("tienda/", include("store.urls", namespace="store")),
