@@ -58,7 +58,7 @@ def redeem_view(request, item_id):
         "item":    item,
         "wallet":  wallet,
         "form":    form,
-        "can_redeem": wallet.balance >= item.price if wallet else False,
+        "can_redeem": (wallet.balance >= item.price and (item.stock == 0 or item.available_stock() > 0)) if wallet else False,
         "already": already,
     })
 

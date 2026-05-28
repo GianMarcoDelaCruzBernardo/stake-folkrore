@@ -86,7 +86,7 @@
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.25rem">
           <div class="price-tag"><i class="bi bi-coin"></i>{{ item.price|floatformat:0 }} soles</div>
           <div class="stock-badge">
-            {% if item.stock == 0 %}Ilimitado{% else %}{{ item.stock }} disponibles{% endif %}
+            {% if item.stock == 0 %}Ilimitado{% else %}{{ item.available_stock }} disponibles{% endif %}
           </div>
         </div>
         {% if user.is_authenticated %}

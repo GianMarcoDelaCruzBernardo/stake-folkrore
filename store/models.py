@@ -34,8 +34,17 @@ class StoreItem(models.Model):
         """True si tiene stock o es ilimitado."""
         return self.is_active and (self.stock == 0 or self.stock > 0)
 
+    def available_stock(self):
+        """Stock real descontando canjes pendientes y aprobados."""
+        if self.stock == 0:
+            return None  # ilimitado
+        usados = self.redemptions.filter(status__in=["pending", "approved"]).count()
+        return max(0, self.stock - usados)
+
     def real_stock_display(self):
-        return "Ilimitado" if self.stock == 0 else str(self.stock)
+        if self.stock == 0:
+            return "Ilimitado"
+        return str(self.available_stock())
 
 
 class Redemption(models.Model):
