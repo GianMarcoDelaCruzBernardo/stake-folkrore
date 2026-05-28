@@ -21,21 +21,25 @@
                     <div class="mb-3">
                         <label>Usuario</label>
                         {{ form.username }}
+                        {% if form.username.errors %}<div style="color:#ef4444;font-size:.8rem;margin-top:.3rem">{{ form.username.errors.0 }}</div>{% endif %}
                     </div>
 
                     <div class="mb-3">
                         <label>Correo</label>
                         {{ form.email }}
+                        {% if form.email.errors %}<div style="color:#ef4444;font-size:.8rem;margin-top:.3rem">{{ form.email.errors.0 }}</div>{% endif %}
                     </div>
 
                     <div class="mb-3">
                         <label>contraseña</label>
                         {{ form.password1 }}
+                        {% if form.password1.errors %}<div style="color:#ef4444;font-size:.8rem;margin-top:.3rem">{{ form.password1.errors.0 }}</div>{% endif %}
                     </div>
 
                     <div class="mb-3">
                         <label>Confirmar contraseña</label>
                         {{ form.password2 }}
+                        {% if form.password2.errors %}<div style="color:#ef4444;font-size:.8rem;margin-top:.3rem">{{ form.password2.errors.0 }}</div>{% endif %}
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100">
