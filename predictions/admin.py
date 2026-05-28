@@ -1,22 +1,15 @@
 from django.contrib import admin
-from unfold.admin import ModelAdmin, TabularInline
-from .models import Prediction, PredictionItem
-
-
-class PredictionItemInline(TabularInline):
-    model = PredictionItem
-    extra = 0
-    fields = ('category', 'block', 'predicted_group_name', 'position')
+from unfold.admin import ModelAdmin
+from .models import Prediction
 
 
 @admin.register(Prediction)
 class PredictionAdmin(ModelAdmin):
-    list_display = ('user', 'contest', 'get_accuracy', 'created_at')
-    list_filter = ('contest',)
-    inlines = [PredictionItemInline]
+    list_display  = ("user", "contest", "champion", "status", "created_at")
+    list_filter   = ("contest",)
+    search_fields = ("user__username", "user__email", "champion__name")
+    readonly_fields = ("user", "contest", "champion", "created_at", "updated_at")
 
-
-@admin.register(PredictionItem)
-class PredictionItemAdmin(ModelAdmin):
-    list_display = ('prediction', 'category', 'predicted_group_name', 'status')
-    list_filter = ('category',)
+    def status(self, obj):
+        return obj.status()
+    status.short_description = "Estado"
