@@ -61,6 +61,7 @@
           <i class="bi bi-trophy"></i>Concursos
         </a>
         {% if user.is_authenticated %}
+        <a class="nav-link-sf" href="{% url 'store:list' %}"><i class="bi bi-shop"></i>Tienda</a>
         <a class="nav-link-sf" href="{% url 'bets:list' %}">
           <i class="bi bi-lightning-charge"></i>Apuestas
         </a>
@@ -147,7 +148,8 @@
     </a>
 
     {% if user.is_authenticated %}
-    <a class="nav-link-sf" href="{% url 'bets:list' %}">
+    <a class="nav-link-sf" href="{% url 'store:list' %}"><i class="bi bi-shop"></i>Tienda</a>
+        <a class="nav-link-sf" href="{% url 'bets:list' %}">
       <i class="bi bi-lightning-charge"></i>Apuestas
     </a>
     <a class="nav-link-sf" href="{% url 'predictions:my_predictions' %}">

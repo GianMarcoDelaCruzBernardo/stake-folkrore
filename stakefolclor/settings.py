@@ -171,8 +171,10 @@ UNFOLD = {
                 {"title":"Tickets",     "icon":"confirmation_number", "link":"/system-control-panel-89721/bets/bet/"},
                 {"title":"Billeteras",  "icon":"wallet",              "link":"/system-control-panel-89721/bets/wallet/"},
             ]},
+            {"title":"Tienda","separator":True,"items":[{"title":"Premios","icon":"redeem","link":"/system-control-panel-89721/store/storeitem/"},{"title":"Solicitudes","icon":"move_to_inbox","link":"/system-control-panel-89721/store/redemption/"}]},
             {"title":"Predicciones","separator":True,"items":[
-                {"title":"Predicciones","icon":"psychology","link":"/system-control-panel-89721/predictions/prediction/"},
+                {"title":"Tienda","separator":True,"items":[{"title":"Premios","icon":"redeem","link":"/system-control-panel-89721/store/storeitem/"},{"title":"Solicitudes","icon":"move_to_inbox","link":"/system-control-panel-89721/store/redemption/"}]},
+            {"title":"Predicciones","icon":"psychology","link":"/system-control-panel-89721/predictions/prediction/"},
             ]},
             {"title":"Usuarios","separator":True,"items":[
                 {"title":"Usuarios","icon":"manage_accounts","link":"/system-control-panel-89721/accounts/customuser/"},
